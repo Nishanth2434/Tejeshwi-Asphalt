@@ -20,8 +20,12 @@ import {
   ExternalLink,
   HelpCircle,
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  UploadCloud
 } from 'lucide-react';
+import { ImageUploadField } from '../../components/admin/ImageUploadField';
+import { processImageUpload } from '../../lib/imageUtils';
+
 
 const PAGE_TABS = [
   { id: 'home', label: 'Home Page' },
@@ -331,40 +335,16 @@ export const WebsiteContentPage: React.FC = () => {
                         </div>
                       )}
 
-                      {/* 3. Image */}
+                      {/* 3. Image (Upload) */}
                       {item.type === 'image' && (
-                        <div className="grid sm:grid-cols-12 gap-4 items-start">
-                          <div className="sm:col-span-8 space-y-2">
-                            <div className="relative">
-                              <ImageIcon className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                              <input
-                                type="text"
-                                value={currentValue || ''}
-                                onChange={(e) => handleFieldChange(item.key, e.target.value)}
-                                placeholder="https://... or /src/assets/..."
-                                className="w-full pl-9 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all text-slate-800"
-                              />
-                            </div>
-                            <p className="text-[11px] text-slate-400">Enter a public image URL or local asset path.</p>
-                          </div>
-
-                          <div className="sm:col-span-4 bg-slate-100 rounded-xl p-2 border border-slate-200 flex flex-col items-center justify-center">
-                            {currentValue ? (
-                              <img
-                                src={currentValue}
-                                alt="Preview"
-                                className="w-full h-24 object-cover rounded-lg shadow-sm"
-                                onError={(e) => {
-                                  (e.target as HTMLElement).style.display = 'none';
-                                }}
-                              />
-                            ) : (
-                              <div className="h-24 flex items-center justify-center text-xs text-slate-400">No Image Preview</div>
-                            )}
-                            <span className="text-[10px] text-slate-500 mt-1 font-medium">Live Preview</span>
-                          </div>
-                        </div>
+                        <ImageUploadField
+                          value={currentValue || ''}
+                          onChange={(newUrl) => handleFieldChange(item.key, newUrl)}
+                          label={item.label}
+                          defaultFallback={item.value}
+                        />
                       )}
+
 
                       {/* 4. List */}
                       {item.type === 'list' && Array.isArray(currentValue) && (
@@ -488,6 +468,44 @@ export const WebsiteContentPage: React.FC = () => {
                                           onChange={(e) => handleBlockFieldChange(item.key, bIdx, fieldKey, e.target.value)}
                                           className="w-full p-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-1 focus:ring-brand-500 focus:outline-none"
                                         />
+                                      ) : ['image', 'avatar', 'img', 'photo', 'bgimage'].includes(fieldKey.toLowerCase()) ? (
+                                        <div className="space-y-1.5">
+                                          <div className="flex items-center gap-2">
+                                            <input
+                                              type="text"
+                                              value={blockObj[fieldKey] || ''}
+                                              onChange={(e) => handleBlockFieldChange(item.key, bIdx, fieldKey, e.target.value)}
+                                              placeholder="Image URL or upload..."
+                                              className="flex-1 px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                                            />
+                                            <label className="cursor-pointer px-2.5 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 rounded-lg text-xs font-bold flex items-center gap-1 shrink-0">
+                                              <UploadCloud className="w-3.5 h-3.5" /> Upload
+                                              <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={async (e) => {
+                                                  if (e.target.files?.[0]) {
+                                                    try {
+                                                      const dataUrl = await processImageUpload(e.target.files[0]);
+                                                      handleBlockFieldChange(item.key, bIdx, fieldKey, dataUrl);
+                                                    } catch (err) {
+                                                      console.error(err);
+                                                    }
+                                                  }
+                                                }}
+                                              />
+                                            </label>
+                                          </div>
+                                          {blockObj[fieldKey] && (
+                                            <img
+                                              src={blockObj[fieldKey]}
+                                              alt="Preview"
+                                              className="h-12 w-20 object-cover rounded-lg border border-slate-200 shadow-sm"
+                                              onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+                                            />
+                                          )}
+                                        </div>
                                       ) : (
                                         <input
                                           type="text"
