@@ -105,50 +105,52 @@ export const Navbar = () => {
     >
       <nav 
         className={cn(
-          "pointer-events-auto flex items-center justify-between gap-4 xl:gap-8 transition-all duration-700 ease-[0.16,1,0.3,1] mx-auto overflow-visible",
+          "pointer-events-auto flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr] transition-all duration-700 ease-[0.16,1,0.3,1] mx-auto overflow-visible",
           isScrolled 
             ? "w-[96%] md:w-[95%] xl:w-[94%] max-w-7xl bg-[#FDFBF7]/95 backdrop-blur-xl shadow-[0_12px_40px_rgb(0,0,0,0.08)] border border-brand-950/10 rounded-[16px] md:rounded-[20px] px-4 sm:px-6 md:px-8 py-2 md:py-2.5" 
             : "w-full md:w-[96%] max-w-7xl bg-transparent border-transparent rounded-none md:rounded-[16px] px-4 sm:px-6 md:px-8 py-2 md:py-3.5"
         )}
       >
         
-        {/* Logo Lockup - Architectural Editorial Style */}
-        <Link to="/" className="flex items-center group relative shrink-0 z-20">
-          {!logoError ? (
-            <div className="flex items-center gap-3 md:gap-4">
-              <img 
-                src="/gsp-logo.png" 
-                alt="GSP Constructions Logo" 
-                className={cn(
-                  "w-auto transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:scale-105",
-                  isScrolled ? "h-7 md:h-9" : "h-8 md:h-11"
-                )} 
-                onError={() => setLogoError(true)}
-              />
-              
-              <div className={cn(
-                "w-[1px] bg-brand-950/15 hidden sm:block transition-all duration-700",
-                isScrolled ? "h-6" : "h-8"
-              )}></div>
-              
-              <div className="flex flex-col items-start justify-center transition-transform duration-500 group-hover:scale-[1.01] origin-left">
-                <span className="font-bold text-[14px] md:text-[18px] tracking-[0.2em] md:tracking-[0.25em] text-brand-950 leading-none mb-1 transition-colors duration-300">
-                  TEJ<span className="text-accent-500">A</span>SHWI
-                </span>
-                <span className="text-[6px] md:text-[8px] font-semibold tracking-[0.15em] md:tracking-[0.2em] text-brand-500 uppercase">
-                  Asphalt & Constructions
-                </span>
+        {/* Left: Logo Lockup */}
+        <div className="flex items-center justify-start min-w-0">
+          <Link to="/" className="flex items-center group relative shrink-0 z-20">
+            {!logoError ? (
+              <div className="flex items-center gap-3 md:gap-4">
+                <img 
+                  src="/gsp-logo.png" 
+                  alt="GSP Constructions Logo" 
+                  className={cn(
+                    "w-auto transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:scale-105",
+                    isScrolled ? "h-7 md:h-9" : "h-8 md:h-11"
+                  )} 
+                  onError={() => setLogoError(true)}
+                />
+                
+                <div className={cn(
+                  "w-[1px] bg-brand-950/15 hidden sm:block transition-all duration-700",
+                  isScrolled ? "h-6" : "h-8"
+                )}></div>
+                
+                <div className="flex flex-col items-start justify-center transition-transform duration-500 group-hover:scale-[1.01] origin-left">
+                  <span className="font-bold text-[14px] md:text-[18px] tracking-[0.2em] md:tracking-[0.25em] text-brand-950 leading-none mb-1 transition-colors duration-300">
+                    TEJ<span className="text-accent-500">A</span>SHWI
+                  </span>
+                  <span className="text-[6px] md:text-[8px] font-semibold tracking-[0.15em] md:tracking-[0.2em] text-brand-500 uppercase">
+                    Asphalt & Constructions
+                  </span>
+                </div>
               </div>
-            </div>
-          ) : (
-            <span className="font-bold text-xl tracking-widest transition-colors text-brand-950">
-              TEJASHWI<span className="text-accent-500 ml-1">Constructions</span>
-            </span>
-          )}
-        </Link>
+            ) : (
+              <span className="font-bold text-xl tracking-widest transition-colors text-brand-950">
+                TEJASHWI<span className="text-accent-500 ml-1">Constructions</span>
+              </span>
+            )}
+          </Link>
+        </div>
 
-        {/* Center: Desktop Navigation */}
-        <div className="hidden lg:flex items-center justify-center shrink-0 gap-0.5 xl:gap-1.5">
+        {/* Center: Desktop Navigation (Mathematically Centered) */}
+        <div className="hidden lg:flex items-center justify-center gap-0.5 xl:gap-2">
           <NavLink to="/about" isActive={isActive('/about')}>About</NavLink>
 
           {/* Services Dropdown */}
@@ -212,9 +214,9 @@ export const Navbar = () => {
           <NavLink to="/gallery" isActive={isActive('/gallery')}>Gallery</NavLink>
         </div>
 
-        {/* Right: CTA Area */}
-        <div className="hidden lg:flex items-center justify-end shrink-0 z-20">
-          <Link to="/contact">
+        {/* Right: CTA Area on Desktop & Mobile Menu Toggle on Mobile */}
+        <div className="flex items-center justify-end">
+          <Link to="/contact" className="hidden lg:block">
             <button className={cn(
               "group relative overflow-hidden bg-brand-950 text-[#FDFBF7] font-semibold text-[12px] xl:text-[13px] tracking-widest uppercase transition-all duration-500 hover:shadow-[0_8px_20px_rgb(3,7,18,0.15)]",
               isScrolled ? "rounded-[12px] px-5 xl:px-7 py-2.5" : "rounded-[14px] px-6 xl:px-8 py-3"
@@ -225,16 +227,16 @@ export const Navbar = () => {
               <div className="absolute inset-0 z-0 h-full w-full bg-accent-500 translate-y-[101%] transition-transform duration-500 ease-[0.16,1,0.3,1] group-hover:translate-y-0" />
             </button>
           </Link>
-        </div>
 
-        {/* Mobile Menu Toggle */}
-        <div className="flex items-center lg:hidden z-50">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2.5 rounded-xl bg-brand-950/5 text-brand-950 focus:outline-none transition-colors hover:bg-brand-950/10"
-          >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          {/* Mobile Menu Toggle */}
+          <div className="flex items-center lg:hidden z-50">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2.5 rounded-xl bg-brand-950/5 text-brand-950 focus:outline-none transition-colors hover:bg-brand-950/10"
+            >
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </nav>
 
