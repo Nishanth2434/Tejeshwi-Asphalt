@@ -27,7 +27,12 @@ export const loadContentFromStorage = (): Map<string, SiteContent> => {
       parsed.forEach((item) => {
         if (map.has(item.key)) {
           const defaultItem = map.get(item.key)!;
-          map.set(item.key, { ...defaultItem, ...item, value: item.value });
+          // If default schema changed to repeatableBlock of objects but localStorage has old strings, upgrade to defaults
+          if (defaultItem.type === 'repeatableBlock' && Array.isArray(item.value) && (item.value.length === 0 || typeof item.value[0] === 'string')) {
+            map.set(item.key, { ...defaultItem });
+          } else {
+            map.set(item.key, { ...defaultItem, ...item, value: item.value });
+          }
         } else {
           map.set(item.key, item);
         }

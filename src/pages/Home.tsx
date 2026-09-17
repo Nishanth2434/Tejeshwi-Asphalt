@@ -160,10 +160,17 @@ export const Home = () => {
 
   const processTitle = useSiteContent('home.process.headline', 'Our Construction Process');
   const processBgImg = useSiteContent('home.process.bgImage', serviceInfra);
-  const processSteps = useSiteContent('home.process.steps', [
-    'Site Survey', 'Planning', 'Site Preparation', 'Base Construction',
-    'Asphalt Paving', 'Compaction', 'Quality Inspection', 'Completion'
-  ]);
+  const defaultProcessSteps = [
+    { step: '01', title: 'Site Survey', image: projectHighway },
+    { step: '02', title: 'Planning', image: aboutImg },
+    { step: '03', title: 'Site Preparation', image: carousel3 },
+    { step: '04', title: 'Base Construction', image: serviceInfra },
+    { step: '05', title: 'Asphalt Paving', image: servicePaving },
+    { step: '06', title: 'Compaction', image: eqRoller },
+    { step: '07', title: 'Quality Inspection', image: serviceConst },
+    { step: '08', title: 'Completion', image: carousel1 }
+  ];
+  const processSteps = useSiteContent('home.process.steps', defaultProcessSteps);
 
   const statsList = useSiteContent('home.stats.items', [
     { end: 120, suffix: "+", title: "Completed Projects" },
@@ -724,29 +731,56 @@ export const Home = () => {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {(processSteps || []).map((step: string, i: number) => (
-              <motion.div 
-                key={i} 
-                initial="hidden" 
-                whileInView="visible" 
-                viewport={{ once: true }} 
-                variants={fadeInUp} 
-                className="group relative bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-accent-500/50 rounded-2xl p-6 lg:p-7 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 shadow-lg"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-3xl md:text-4xl font-black text-accent-400/50 group-hover:text-accent-400 transition-colors">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-semibold text-brand-200 group-hover:border-accent-400/40 group-hover:text-accent-400 transition-colors">
-                    ✓
+            {(processSteps || []).map((stepItem: any, i: number) => {
+              const isObj = typeof stepItem === 'object' && stepItem !== null;
+              const stepNumber = isObj && stepItem.step ? stepItem.step : String(i + 1).padStart(2, '0');
+              const stepTitle = isObj ? (stepItem.title || stepItem.name || `Step ${i + 1}`) : stepItem;
+              const stepImg = (isObj && stepItem.image) 
+                ? stepItem.image 
+                : (defaultProcessSteps[i]?.image || projectHighway);
+
+              return (
+                <motion.div 
+                  key={i} 
+                  initial="hidden" 
+                  whileInView="visible" 
+                  viewport={{ once: true }} 
+                  variants={fadeInUp} 
+                  className="group relative overflow-hidden rounded-2xl border border-white/20 p-6 lg:p-7 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,0,0,0.7)] hover:border-accent-400 min-h-[190px] flex flex-col justify-between"
+                >
+                  {/* Background Image inside this box */}
+                  <img 
+                    src={stepImg} 
+                    alt={stepTitle} 
+                    className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110" 
+                  />
+
+                  {/* High-contrast dark gradient overlay for crystal clear text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-brand-950/80 to-brand-950/60 group-hover:from-black/90 group-hover:via-brand-950/70 group-hover:to-brand-950/45 transition-colors duration-500" />
+                  
+                  {/* Subtle inner border glow on hover */}
+                  <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 group-hover:ring-accent-400/40 pointer-events-none transition-all duration-300" />
+
+                  {/* Top: Step Number & Checkmark Badge */}
+                  <div className="relative z-10 flex items-center justify-between mb-6">
+                    <span className="text-3xl md:text-4xl font-black text-accent-400 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] group-hover:text-accent-300 transition-colors">
+                      {stepNumber}
+                    </span>
+                    <div className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-xs font-bold text-accent-300 shadow-lg group-hover:border-accent-400 group-hover:text-accent-400 group-hover:bg-accent-500/20 transition-all duration-300">
+                      ✓
+                    </div>
                   </div>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-3 group-hover:text-accent-200 transition-colors">
-                  {step}
-                </h3>
-                <div className="w-8 h-0.5 bg-accent-500/60 rounded-full transition-all duration-300 group-hover:w-full group-hover:bg-accent-400" />
-              </motion.div>
-            ))}
+
+                  {/* Bottom: Step Title & Animated Accent Line */}
+                  <div className="relative z-10">
+                    <h3 className="text-lg md:text-xl font-bold text-white mb-3 tracking-wide drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] group-hover:text-accent-100 transition-colors">
+                      {stepTitle}
+                    </h3>
+                    <div className="w-10 h-1 bg-accent-500 rounded-full transition-all duration-500 group-hover:w-full group-hover:bg-accent-400 shadow-[0_0_12px_rgba(245,158,11,0.6)]" />
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

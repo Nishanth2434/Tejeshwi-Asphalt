@@ -426,18 +426,24 @@ export const initialSiteContent: SiteContent[] = [
     page: 'home',
     section: 'Construction Process',
     type: 'image',
-    label: 'Process Background Image',
+    label: 'Process Section Background Image',
     value: serviceInfra
   },
   {
     key: 'home.process.steps',
     page: 'home',
     section: 'Construction Process',
-    type: 'list',
+    type: 'repeatableBlock',
     label: 'Construction Process Steps',
     value: [
-      'Site Survey', 'Planning', 'Site Preparation', 'Base Construction',
-      'Asphalt Paving', 'Compaction', 'Quality Inspection', 'Completion'
+      { step: '01', title: 'Site Survey', image: projectHighway },
+      { step: '02', title: 'Planning', image: aboutImg },
+      { step: '03', title: 'Site Preparation', image: carousel3 },
+      { step: '04', title: 'Base Construction', image: serviceInfra },
+      { step: '05', title: 'Asphalt Paving', image: servicePaving },
+      { step: '06', title: 'Compaction', image: eqRoller },
+      { step: '07', title: 'Quality Inspection', image: serviceConst },
+      { step: '08', title: 'Completion', image: carousel1 }
     ]
   },
 
