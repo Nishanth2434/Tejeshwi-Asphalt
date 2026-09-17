@@ -23,6 +23,7 @@ import projectHighway from '../assets/images/projects/project_highway.jpg';
 import projectDowntown from '../assets/images/projects/project_downtown.jpg';
 import servicePaving from '../assets/images/services/service_paving.jpg';
 import serviceConst from '../assets/images/services/service_construction.jpg';
+import serviceInfra from '../assets/images/services/service_infra.jpg';
 import eqPaver from '../assets/images/equipment/eq_paver.jpg';
 import eqRoller from '../assets/images/equipment/eq_roller.jpg';
 import ctaBg from '../assets/images/hero/cta_bg.jpg';
@@ -158,6 +159,7 @@ export const Home = () => {
   ]);
 
   const processTitle = useSiteContent('home.process.headline', 'Our Construction Process');
+  const processBgImg = useSiteContent('home.process.bgImage', serviceInfra);
   const processSteps = useSiteContent('home.process.steps', [
     'Site Survey', 'Planning', 'Site Preparation', 'Base Construction',
     'Asphalt Paving', 'Compaction', 'Quality Inspection', 'Completion'
@@ -698,20 +700,51 @@ export const Home = () => {
       </section>
 
       {/* SECTION 7 - PROCESS */}
-      <section className="section-padding bg-white">
-        <div className="container-custom">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold text-brand-950">{processTitle}</h2>
+      <section className="relative py-20 lg:py-28 overflow-hidden bg-brand-950 text-white">
+        {/* Background Image with Ambient Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={processBgImg} 
+            alt="Construction Process Background" 
+            className="w-full h-full object-cover object-center" 
+          />
+          <div className="absolute inset-0 bg-brand-950/85 backdrop-blur-[1px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-950 via-brand-950/75 to-brand-950/90" />
+        </div>
+
+        <div className="container-custom relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16 lg:mb-20">
+            <span className="text-xs font-bold tracking-[0.25em] text-accent-400 uppercase mb-3 block">
+              Proven Methodology
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+              {processTitle}
+            </h2>
+            <div className="w-16 h-1 bg-accent-500 mx-auto mt-4 rounded-full" />
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {(processSteps || []).map((step: string, i: number) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="relative group">
-                <div className="text-6xl font-black text-brand-50 mb-4 transition-colors group-hover:text-brand-100">
-                  {String(i + 1).padStart(2, '0')}
+              <motion.div 
+                key={i} 
+                initial="hidden" 
+                whileInView="visible" 
+                viewport={{ once: true }} 
+                variants={fadeInUp} 
+                className="group relative bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-accent-500/50 rounded-2xl p-6 lg:p-7 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 shadow-lg"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl md:text-4xl font-black text-accent-400/50 group-hover:text-accent-400 transition-colors">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-semibold text-brand-200 group-hover:border-accent-400/40 group-hover:text-accent-400 transition-colors">
+                    ✓
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold text-brand-950 mb-2">{step}</h3>
-                <div className="w-12 h-1 bg-brand-500 transition-all group-hover:w-full" />
+                <h3 className="text-lg font-bold text-white mb-3 group-hover:text-accent-200 transition-colors">
+                  {step}
+                </h3>
+                <div className="w-8 h-0.5 bg-accent-500/60 rounded-full transition-all duration-300 group-hover:w-full group-hover:bg-accent-400" />
               </motion.div>
             ))}
           </div>

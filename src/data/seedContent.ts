@@ -422,6 +422,14 @@ export const initialSiteContent: SiteContent[] = [
     value: 'Our Construction Process'
   },
   {
+    key: 'home.process.bgImage',
+    page: 'home',
+    section: 'Construction Process',
+    type: 'image',
+    label: 'Process Background Image',
+    value: serviceInfra
+  },
+  {
     key: 'home.process.steps',
     page: 'home',
     section: 'Construction Process',
@@ -432,6 +440,7 @@ export const initialSiteContent: SiteContent[] = [
       'Asphalt Paving', 'Compaction', 'Quality Inspection', 'Completion'
     ]
   },
+
 
   // --- HOMEPAGE: STATS COUNTERS ---
   {
