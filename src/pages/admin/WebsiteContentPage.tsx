@@ -24,7 +24,9 @@ import {
   UploadCloud
 } from 'lucide-react';
 import { ImageUploadField } from '../../components/admin/ImageUploadField';
+import { CarouselUploader } from '../../components/admin/CarouselUploader';
 import { processImageUpload } from '../../lib/imageUtils';
+
 
 
 const PAGE_TABS = [
@@ -346,42 +348,53 @@ export const WebsiteContentPage: React.FC = () => {
                       )}
 
 
-                      {/* 4. List */}
+                      {/* 4. List / Carousel Image Uploader */}
                       {item.type === 'list' && Array.isArray(currentValue) && (
-                        <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-slate-700">List Elements ({currentValue.length})</span>
-                            <button
-                              type="button"
-                              onClick={() => handleAddListItem(item.key)}
-                              className="inline-flex items-center gap-1 text-xs font-bold text-brand-600 hover:text-brand-700"
-                            >
-                              <Plus className="w-3.5 h-3.5" /> Add Element
-                            </button>
+                        (item.key.includes('carousel') || item.key.includes('Images') || item.key.includes('slides')) ? (
+                          <CarouselUploader
+                            images={currentValue}
+                            onChange={(newImages) => handleFieldChange(item.key, newImages)}
+                            defaultImages={item.value}
+                            label={item.label}
+                            description="Upload, arrange, and manage background scrolling images in the hero section."
+                          />
+                        ) : (
+                          <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-700">List Elements ({currentValue.length})</span>
+                              <button
+                                type="button"
+                                onClick={() => handleAddListItem(item.key)}
+                                className="inline-flex items-center gap-1 text-xs font-bold text-brand-600 hover:text-brand-700"
+                              >
+                                <Plus className="w-3.5 h-3.5" /> Add Element
+                              </button>
+                            </div>
+                            
+                            <div className="space-y-2">
+                              {currentValue.map((listItem: string, lIdx: number) => (
+                                <div key={lIdx} className="flex items-center gap-2">
+                                  <input
+                                    type="text"
+                                    value={listItem}
+                                    onChange={(e) => handleListStringChange(item.key, lIdx, e.target.value)}
+                                    className="flex-1 px-3 py-1.5 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveListItem(item.key, lIdx)}
+                                    className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-white"
+                                    title="Delete item"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                          
-                          <div className="space-y-2">
-                            {currentValue.map((listItem: string, lIdx: number) => (
-                              <div key={lIdx} className="flex items-center gap-2">
-                                <input
-                                  type="text"
-                                  value={listItem}
-                                  onChange={(e) => handleListStringChange(item.key, lIdx, e.target.value)}
-                                  className="flex-1 px-3 py-1.5 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => handleRemoveListItem(item.key, lIdx)}
-                                  className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-white"
-                                  title="Delete item"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                        )
                       )}
+
 
                       {/* 5. Repeatable Block (Cards/Testimonials/Stats/Leadership) */}
                       {item.type === 'repeatableBlock' && Array.isArray(currentValue) && (

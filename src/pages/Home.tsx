@@ -3,8 +3,9 @@ import { motion, useAnimation, useInView, type Variants, AnimatePresence } from 
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, CheckCircle2, Award, HardHat, TrendingUp, ShieldCheck, 
-  MapPin, Clock, Settings, ChevronRight, Star, Quote
+  MapPin, Clock, Settings, ChevronRight, ChevronLeft, Star, Quote
 } from 'lucide-react';
+
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
@@ -279,6 +280,53 @@ export const Home = () => {
             </motion.div>
           </div>
         </div>
+
+        {/* Hero Background Scrolling Controls & Indicators */}
+        {slides.length > 1 && (
+          <div className="absolute bottom-8 right-6 sm:right-12 z-20 flex items-center gap-3 sm:gap-4 bg-brand-950/60 backdrop-blur-md px-3 sm:px-4 py-2 rounded-full border border-white/15 shadow-2xl">
+            {/* Prev Button */}
+            <button
+              type="button"
+              onClick={() => setCurrentImage((prev) => (prev - 1 + slides.length) % slides.length)}
+              className="p-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+              aria-label="Previous background slide"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {/* Slide Indicator Dots */}
+            <div className="flex items-center gap-1.5">
+              {slides.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setCurrentImage(idx)}
+                  className={`h-1.5 rounded-full transition-all duration-500 ${
+                    currentImage === idx 
+                      ? 'w-6 bg-accent-500' 
+                      : 'w-1.5 bg-white/40 hover:bg-white/70'
+                  }`}
+                  aria-label={`Go to background slide ${idx + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Slide Counter Text */}
+            <span className="text-[11px] font-mono font-bold text-white/80 select-none">
+              0{currentImage + 1} / 0{slides.length}
+            </span>
+
+            {/* Next Button */}
+            <button
+              type="button"
+              onClick={() => setCurrentImage((prev) => (prev + 1) % slides.length)}
+              className="p-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+              aria-label="Next background slide"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </section>
 
       {/* SECTION 2 - COMPANY INTRODUCTION */}

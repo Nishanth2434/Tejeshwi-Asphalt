@@ -1,0 +1,302 @@
+import React, { useState, useRef } from 'react';
+import { 
+  UploadCloud, 
+  Trash2, 
+  ArrowLeft, 
+  ArrowRight, 
+  Image as ImageIcon, 
+  Plus, 
+  RotateCcw,
+  Loader2,
+  CheckCircle2,
+  AlertCircle
+} from 'lucide-react';
+import { processImageUpload } from '../../lib/imageUtils';
+
+interface CarouselUploaderProps {
+  images: string[];
+  onChange: (newImages: string[]) => void;
+  defaultImages?: string[];
+  label?: string;
+  description?: string;
+}
+
+export const CarouselUploader: React.FC<CarouselUploaderProps> = ({
+  images,
+  onChange,
+  defaultImages = [],
+  label = 'Hero Background Scrolling Images',
+  description = 'Upload and arrange the background images that cycle in the hero section.'
+}) => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [replaceIndex, setReplaceIndex] = useState<number | null>(null);
+  const addFileInputRef = useRef<HTMLInputElement | null>(null);
+  const replaceFileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const safeImages = Array.isArray(images) ? images : [];
+
+  // Handle adding new image
+  const handleAddNewFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setErrorMessage(null);
+    setIsProcessing(true);
+
+    try {
+      const newUrls: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.type.startsWith('image/')) {
+          const dataUrl = await processImageUpload(file);
+          newUrls.push(dataUrl);
+        }
+      }
+
+      if (newUrls.length > 0) {
+        onChange([...safeImages, ...newUrls]);
+      } else {
+        setErrorMessage('No valid image files selected.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'Failed to process image upload.');
+    } finally {
+      setIsProcessing(false);
+      if (addFileInputRef.current) addFileInputRef.current.value = '';
+    }
+  };
+
+  // Handle replacing existing image
+  const handleReplaceFile = async (files: FileList | null) => {
+    if (!files || files.length === 0 || replaceIndex === null) return;
+    setErrorMessage(null);
+    setIsProcessing(true);
+
+    try {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        const dataUrl = await processImageUpload(file);
+        const updated = [...safeImages];
+        updated[replaceIndex] = dataUrl;
+        onChange(updated);
+      } else {
+        setErrorMessage('Please select a valid image file.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'Failed to replace image.');
+    } finally {
+      setIsProcessing(false);
+      setReplaceIndex(null);
+      if (replaceFileInputRef.current) replaceFileInputRef.current.value = '';
+    }
+  };
+
+  // Reorder
+  const handleMove = (index: number, direction: 'left' | 'right') => {
+    const targetIdx = direction === 'left' ? index - 1 : index + 1;
+    if (targetIdx < 0 || targetIdx >= safeImages.length) return;
+
+    const updated = [...safeImages];
+    const temp = updated[index];
+    updated[index] = updated[targetIdx];
+    updated[targetIdx] = temp;
+    onChange(updated);
+  };
+
+  // Remove
+  const handleRemove = (index: number) => {
+    if (safeImages.length <= 1) {
+      alert('The hero section requires at least 1 background image.');
+      return;
+    }
+    const updated = safeImages.filter((_, i) => i !== index);
+    onChange(updated);
+  };
+
+  // Reset to default
+  const handleResetToDefault = () => {
+    if (defaultImages.length > 0 && window.confirm('Reset hero background images to factory defaults?')) {
+      onChange([...defaultImages]);
+    }
+  };
+
+  return (
+    <div className="space-y-4 bg-slate-50/80 p-5 sm:p-6 rounded-2xl border border-slate-200">
+      
+      {/* Hidden file inputs */}
+      <input
+        ref={addFileInputRef}
+        type="file"
+        multiple
+        accept="image/png, image/jpeg, image/webp, image/svg+xml"
+        className="hidden"
+        onChange={(e) => handleAddNewFiles(e.target.files)}
+      />
+
+      <input
+        ref={replaceFileInputRef}
+        type="file"
+        accept="image/png, image/jpeg, image/webp, image/svg+xml"
+        className="hidden"
+        onChange={(e) => handleReplaceFile(e.target.files)}
+      />
+
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+        <div>
+          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <ImageIcon className="w-4 h-4 text-brand-600" />
+            {label}
+            <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-brand-100 text-brand-700">
+              {safeImages.length} {safeImages.length === 1 ? 'Slide' : 'Slides'}
+            </span>
+          </h3>
+          <p className="text-xs text-slate-500 mt-0.5">{description}</p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {defaultImages.length > 0 && (
+            <button
+              type="button"
+              onClick={handleResetToDefault}
+              className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
+              title="Reset background slides to defaults"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Reset Slides
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => addFileInputRef.current?.click()}
+            disabled={isProcessing}
+            className="px-3.5 py-1.5 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 active:bg-brand-800 rounded-lg transition-all flex items-center gap-1.5 shadow-sm"
+          >
+            {isProcessing ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <Plus className="w-3.5 h-3.5" />
+            )}
+            Upload New Slide
+          </button>
+        </div>
+      </div>
+
+      {/* Error alert */}
+      {errorMessage && (
+        <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
+
+      {/* Slide Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {safeImages.map((imgUrl, idx) => (
+          <div
+            key={idx}
+            className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm flex flex-col group hover:shadow-md transition-shadow"
+          >
+            {/* Image Preview */}
+            <div className="relative aspect-video bg-slate-100 overflow-hidden">
+              <img
+                src={imgUrl}
+                alt={`Hero Slide ${idx + 1}`}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
+              />
+              <div className="absolute top-2 left-2 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-black px-2 py-0.5 rounded shadow">
+                #{idx + 1}
+              </div>
+
+              {/* Hover overlay with quick replace */}
+              <div className="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setReplaceIndex(idx);
+                    replaceFileInputRef.current?.click();
+                  }}
+                  className="px-2.5 py-1.5 bg-white text-slate-900 text-xs font-bold rounded-lg shadow hover:bg-slate-100 transition-colors flex items-center gap-1"
+                >
+                  <UploadCloud className="w-3.5 h-3.5" /> Replace
+                </button>
+              </div>
+            </div>
+
+            {/* Controls Bar */}
+            <div className="p-3 bg-white flex items-center justify-between border-t border-slate-100">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  disabled={idx === 0}
+                  onClick={() => handleMove(idx, 'left')}
+                  className="p-1.5 text-slate-400 hover:text-slate-700 disabled:opacity-20 rounded border border-slate-200 hover:bg-slate-50"
+                  title="Move earlier in scroll sequence"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  type="button"
+                  disabled={idx === safeImages.length - 1}
+                  onClick={() => handleMove(idx, 'right')}
+                  className="p-1.5 text-slate-400 hover:text-slate-700 disabled:opacity-20 rounded border border-slate-200 hover:bg-slate-50"
+                  title="Move later in scroll sequence"
+                >
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setReplaceIndex(idx);
+                    replaceFileInputRef.current?.click();
+                  }}
+                  className="text-xs font-semibold text-brand-600 hover:text-brand-700 hover:bg-brand-50 px-2 py-1 rounded"
+                >
+                  Replace
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleRemove(idx)}
+                  className="p-1.5 text-slate-400 hover:text-rose-600 rounded border border-slate-200 hover:bg-rose-50"
+                  title="Remove slide"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {/* Dropzone / Upload New Slide Card */}
+        <div
+          onClick={() => addFileInputRef.current?.click()}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault();
+            handleAddNewFiles(e.dataTransfer.files);
+          }}
+          className="cursor-pointer border-2 border-dashed border-slate-300 hover:border-brand-500 bg-white/60 hover:bg-brand-50/40 rounded-xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center transition-all group"
+        >
+          <div className="w-10 h-10 rounded-full bg-brand-50 group-hover:bg-brand-100 text-brand-600 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <Plus className="w-5 h-5" />
+          </div>
+          <span className="text-xs font-bold text-slate-800 block">
+            Add Background Slide
+          </span>
+          <span className="text-[10px] text-slate-400 block mt-0.5">
+            Drop image here or click to browse
+          </span>
+        </div>
+      </div>
+
+    </div>
+  );
+};
