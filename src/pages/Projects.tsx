@@ -5,6 +5,7 @@ import { ArrowRight, MapPin, Filter } from 'lucide-react';
 import { mockProjects } from '../data/mockData';
 import { Badge } from '../components/ui/Badge';
 import ctaBg from '../assets/images/hero/cta_bg.jpg';
+import { useSiteContent } from '../lib/getContent';
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -16,9 +17,14 @@ const staggerContainer: Variants = {
   visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
 };
 
-const categories = ['All', 'Road Construction', 'Asphalt Paving', 'Infrastructure', 'Maintenance'];
+const defaultCategories = ['All', 'Road Construction', 'Asphalt Paving', 'Infrastructure', 'Maintenance'];
 
 export const Projects = () => {
+  const heroHeadline = useSiteContent('projects.hero.headline', 'Projects That Move People Forward.');
+  const heroDesc = useSiteContent('projects.hero.description', 'Explore our portfolio of complex engineering feats, from high-speed interstates to heavy-load airport runways.');
+  const categories = useSiteContent<string[]>('projects.categories', defaultCategories);
+
+
   const [filter, setFilter] = useState('All');
 
   const filteredProjects = mockProjects.filter(p => 
@@ -35,15 +41,16 @@ export const Projects = () => {
         </div>
         <div className="container-custom relative z-10 text-center max-w-4xl mx-auto">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-            <motion.h1 variants={fadeInUp} className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
-              Projects That Move <span className="text-brand-400">People Forward.</span>
+            <motion.h1 variants={fadeInUp} className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 tracking-tight whitespace-pre-line">
+              {heroHeadline}
             </motion.h1>
             <motion.p variants={fadeInUp} className="text-xl text-brand-200 font-light">
-              Explore our portfolio of complex engineering feats, from high-speed interstates to heavy-load airport runways.
+              {heroDesc}
             </motion.p>
           </motion.div>
         </div>
       </section>
+
 
       {/* Filter Section */}
       <section className="py-8 bg-brand-50 border-b border-brand-100 sticky top-[72px] z-30 shadow-sm">

@@ -1,10 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { HardHat, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, ArrowRight, ShieldCheck } from 'lucide-react';
+import { useSiteContent } from '../../lib/getContent';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [logoError, setLogoError] = React.useState(false);
+
+  const brandName = useSiteContent('footer.brand.name', 'TEJASHWI');
+  const brandTagline = useSiteContent('footer.brand.tagline', 'Asphalt & Constructions');
+  const companySummary = useSiteContent(
+    'footer.companySummary',
+    'Premium asphalt and infrastructure construction services. Building the robust roads to the future with precision, durability, and world-class engineering innovation.'
+  );
+  const servicesTitle = useSiteContent('footer.servicesTitle', 'Our Services');
+  const quickLinksTitle = useSiteContent('footer.quickLinksTitle', 'Quick Links');
+  const contactTitle = useSiteContent('footer.contactTitle', 'Contact Us');
+  const phone = useSiteContent('footer.phone', '+1 (555) 123-4567');
+  const email = useSiteContent('footer.email', 'contact@apexinfra.com');
+  const address = useSiteContent('footer.address', '123 Industrial Parkway, Suite 100, Metropolis, NY 10001');
+  const copyrightTemplate = useSiteContent(
+    'footer.copyrightText',
+    '© {year} Tejashwi Asphalt and Constructions. All rights reserved.'
+  );
+
+  const renderedCopyright = copyrightTemplate.replace('{year}', currentYear.toString());
 
   return (
     <footer className="bg-brand-50 text-brand-950 pt-20 pb-8 border-t-[6px] border-brand-500">
@@ -27,12 +47,12 @@ export const Footer = () => {
                   
                   <div className="flex flex-col items-start justify-center">
                     <span className="font-bold text-[28px] tracking-[0.2em] text-brand-950 leading-none mb-2">
-                      TEJ<span className="text-accent-500">A</span>SHWI
+                      {brandName.slice(0, 3)}<span className="text-accent-500">{brandName.slice(3, 4) || 'A'}</span>{brandName.slice(4)}
                     </span>
                     <div className="flex items-center gap-2.5">
                       <div className="h-[1.5px] w-4 bg-accent-500/70"></div>
                       <span className="text-[11px] font-semibold tracking-[0.2em] text-brand-600 uppercase">
-                        Asphalt & Constructions
+                        {brandTagline}
                       </span>
                       <div className="h-[1.5px] w-4 bg-accent-500/70"></div>
                     </div>
@@ -40,24 +60,24 @@ export const Footer = () => {
                 </div>
               ) : (
                 <span className="font-bold text-3xl tracking-tight text-brand-950">
-                  TEJASHWI<span className="text-accent-500 text-xl ml-1">Constructions</span>
+                  {brandName}<span className="text-accent-500 text-xl ml-1">Constructions</span>
                 </span>
               )}
             </Link>
             <p className="text-brand-700 text-lg leading-relaxed max-w-sm">
-              Premium asphalt and infrastructure construction services. Building the robust roads to the future with precision, durability, and world-class engineering innovation.
+              {companySummary}
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <a href="#" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-brand-100 transition-colors">
+              <a href="#" aria-label="Facebook" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-brand-100 transition-colors">
                 <svg className="w-5 h-5 text-brand-600" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.597 1.323-1.324V1.325C24 .597 23.403 0 22.675 0z"/></svg>
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-brand-100 transition-colors">
+              <a href="#" aria-label="Twitter" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-brand-100 transition-colors">
                 <svg className="w-5 h-5 text-brand-600" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-brand-100 transition-colors">
+              <a href="#" aria-label="LinkedIn" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-brand-100 transition-colors">
                 <svg className="w-5 h-5 text-brand-600" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-brand-100 transition-colors">
+              <a href="#" aria-label="Instagram" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-brand-100 transition-colors">
                 <svg className="w-5 h-5 text-brand-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
               </a>
             </div>
@@ -67,7 +87,7 @@ export const Footer = () => {
           <div className="lg:col-span-3">
             <h4 className="text-xl font-semibold mb-6 text-brand-950 flex items-center gap-2">
               <span className="w-1.5 h-6 bg-brand-500 rounded-full inline-block"></span>
-              Our Services
+              {servicesTitle}
             </h4>
             <ul className="space-y-4">
               {[
@@ -93,7 +113,7 @@ export const Footer = () => {
           <div className="lg:col-span-2">
             <h4 className="text-xl font-semibold mb-6 text-brand-950 flex items-center gap-2">
               <span className="w-1.5 h-6 bg-brand-500 rounded-full inline-block"></span>
-              Quick Links
+              {quickLinksTitle}
             </h4>
             <ul className="space-y-4">
               {['About', 'Projects', 'Equipment', 'Gallery', 'Contact'].map((item) => (
@@ -114,16 +134,16 @@ export const Footer = () => {
           <div className="lg:col-span-3">
             <h4 className="text-xl font-semibold mb-6 text-brand-950 flex items-center gap-2">
               <span className="w-1.5 h-6 bg-brand-500 rounded-full inline-block"></span>
-              Contact Us
+              {contactTitle}
             </h4>
             <ul className="space-y-5">
               <li className="flex items-start gap-4 text-brand-700 font-medium">
                 <div className="bg-white shadow-sm p-3 rounded-lg text-brand-600 shrink-0">
                   <MapPin className="h-6 w-6" />
                 </div>
-                <div className="leading-relaxed pt-1">
+                <div className="leading-relaxed pt-1 whitespace-pre-line">
                   <strong className="block text-brand-950 font-bold mb-1">Corporate Office</strong>
-                  123 Industrial Parkway, Suite 100<br/>Metropolis, NY 10001
+                  {address}
                 </div>
               </li>
               <li className="flex items-center gap-4 text-brand-700 font-medium">
@@ -132,7 +152,7 @@ export const Footer = () => {
                 </div>
                 <div>
                   <strong className="block text-brand-950 font-bold mb-0.5">Phone</strong>
-                  +1 (555) 123-4567
+                  {phone}
                 </div>
               </li>
               <li className="flex items-center gap-4 text-brand-700 font-medium">
@@ -141,7 +161,7 @@ export const Footer = () => {
                 </div>
                 <div>
                   <strong className="block text-brand-950 font-bold mb-0.5">Email</strong>
-                  contact@apexinfra.com
+                  {email}
                 </div>
               </li>
             </ul>
@@ -151,15 +171,19 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-brand-200 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-brand-600 font-medium">
-            &copy; {currentYear} Tejashwi Asphalt and Constructions. All rights reserved.
+            {renderedCopyright}
           </p>
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-brand-600">
+          <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 text-sm font-medium text-brand-600">
             <Link to="/privacy-policy" className="hover:text-brand-900 transition-colors">Privacy Policy</Link>
             <Link to="/terms-of-service" className="hover:text-brand-900 transition-colors">Terms of Service</Link>
             <Link to="/sitemap" className="hover:text-brand-900 transition-colors">Sitemap</Link>
+            <Link to="/admin/website" className="hover:text-brand-900 transition-colors inline-flex items-center gap-1.5 text-brand-500 hover:text-brand-700 font-semibold bg-brand-100/70 hover:bg-brand-100 px-3 py-1 rounded-full">
+              <ShieldCheck className="w-3.5 h-3.5" /> CMS Admin
+            </Link>
           </div>
         </div>
       </div>
     </footer>
   );
 };
+

@@ -9,6 +9,7 @@ import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { cn } from '../utils/cn';
+import { useSiteContent } from '../lib/getContent';
 
 // Asset Imports
 import carousel1 from '../assets/images/hero/carousel_1.jpg';
@@ -98,12 +99,113 @@ export const Home = () => {
   const [activeService, setActiveService] = useState(0);
   const [activeProject, setActiveProject] = useState(0);
 
+  // Dynamic Site Content Hooks
+  const heroBadge = useSiteContent('home.hero.badge', 'Premium Infrastructure Solutions');
+  const heroHeadline = useSiteContent('home.hero.headline', 'Building Roads.\nConnecting Progress.');
+  const heroDesc = useSiteContent('home.hero.description', 'Delivering premium asphalt paving, structural road construction, and comprehensive infrastructure solutions engineered for durability and scale.');
+  const heroPrimaryText = useSiteContent('home.hero.primaryCtaText', 'Explore Projects');
+  const heroPrimaryLink = useSiteContent('home.hero.primaryCtaLink', '/projects');
+  const heroSecondaryText = useSiteContent('home.hero.secondaryCtaText', 'Request a Quote');
+  const heroSecondaryLink = useSiteContent('home.hero.secondaryCtaLink', '/contact');
+  const heroSlides = useSiteContent('home.hero.carouselImages', heroImages);
+
+  const legacyNum = useSiteContent('home.legacy.sectionNumber', '01');
+  const legacyBadge = useSiteContent('home.legacy.badge', 'Our Legacy');
+  const legacyHeadline = useSiteContent('home.legacy.headline', 'Engineering excellence.');
+  const legacyBody = useSiteContent('home.legacy.body', 'TEJASHWI stands at the forefront of modern infrastructure development. We specialize in heavy civil construction, delivering robust road networks that power economies and connect communities.\n\nOur commitment to utilizing cutting-edge machinery and premium materials ensures that every project, from vast highways to intricate urban developments, is engineered for generations.');
+  const legacyImg = useSiteContent('home.legacy.image', aboutImg);
+  const legacyTag = useSiteContent('home.legacy.imageAnnotation', 'TEJASHWI / Field Operations');
+  const legacyStats = useSiteContent('home.legacy.stats', [
+    { label: 'Years Experience', val: '15+' },
+    { label: 'Projects Completed', val: '120+' },
+    { label: 'Heavy Machines', val: '40+' },
+    { label: 'Regions Served', val: 'Multiple' },
+  ]);
+  const legacyCtaText = useSiteContent('home.legacy.ctaText', 'Discover Our Story');
+
+  const servicesNum = useSiteContent('home.services.sectionNumber', '02');
+  const servicesBadge = useSiteContent('home.services.badge', 'What We Do');
+  const servicesHeadline = useSiteContent('home.services.headline', 'Advanced infrastructure solutions built for lasting performance.');
+  const servicesSub = useSiteContent('home.services.subheadline', 'Delivering high-capacity construction services across multiple engineering disciplines.');
+  const servicesList = useSiteContent('home.services.items', showcaseServices);
+
+  const projectsNum = useSiteContent('home.projects.sectionNumber', '03');
+  const projectsBadge = useSiteContent('home.projects.badge', 'Selected Work');
+  const projectsHeadline = useSiteContent('home.projects.headline', 'Featured Projects');
+  const projectsDesc = useSiteContent('home.projects.description', 'A selection of infrastructure projects engineered for scale, durability and long-term performance.');
+  const projectsViewAll = useSiteContent('home.projects.viewAllText', 'View All Projects');
+  const projectsList = useSiteContent('home.projects.items', showcaseProjects);
+
+  const whyTitle = useSiteContent('home.whyChooseUs.headline', 'The Apex Advantage');
+  const whySub = useSiteContent('home.whyChooseUs.subheadline', 'Uncompromising standards. Precision engineering. Superior results.');
+  const whyCards = useSiteContent('home.whyChooseUs.items', [
+    { title: 'Experienced Team', desc: 'Leveraging industry best practices to deliver outstanding results that exceed client expectations every time.' },
+    { title: 'Modern Equipment', desc: 'State-of-the-art machinery fleet ensuring high precision, speed, and safety compliance.' },
+    { title: 'Quality Materials', desc: 'High-grade aggregate and polymer-modified asphalt formulated for extreme durability.' },
+    { title: 'Safety First', desc: 'Zero-compromise safety protocols protecting personnel and public on active roadways.' },
+    { title: 'On-Time Delivery', desc: 'Systematic timeline management keeping project milestones strictly on schedule.' },
+    { title: 'Engineering Expertise', desc: 'Decades of combined engineering skill tackling complex civil infrastructure.' }
+  ]);
+
+  const machineryTitle = useSiteContent('home.machinery.headline', 'Our Heavy Machinery');
+  const machineryList = useSiteContent('home.machinery.items', [
+    { img: eqPaver, name: 'Asphalt Paver' },
+    { img: eqRoller, name: 'Road Roller' },
+    { img: eqPaver, name: 'Excavator' },
+    { img: eqRoller, name: 'Motor Grader' },
+    { img: eqPaver, name: 'Tipper Truck' },
+  ]);
+
+  const processTitle = useSiteContent('home.process.headline', 'Our Construction Process');
+  const processSteps = useSiteContent('home.process.steps', [
+    'Site Survey', 'Planning', 'Site Preparation', 'Base Construction',
+    'Asphalt Paving', 'Compaction', 'Quality Inspection', 'Completion'
+  ]);
+
+  const statsList = useSiteContent('home.stats.items', [
+    { end: 120, suffix: "+", title: "Completed Projects" },
+    { end: 15, suffix: "+", title: "Years Experience" },
+    { end: 40, suffix: "+", title: "Heavy Machines" },
+    { end: 98, suffix: "%", title: "On-Time Completion" },
+  ]);
+
+  const testimonialsTitle = useSiteContent('home.testimonials.headline', 'Client Testimonials');
+  const testimonialsList = useSiteContent('home.testimonials.items', [
+    {
+      text: "Tejashwi Constructions delivered exceptional quality on the Mysore Ring Road resurfacing. Their team's dedication to timelines and material quality is unmatched in the region.",
+      photo: client1,
+      name: "Ramesh Gowda",
+      role: "Chief Engineer, Mysore Infrastructure Dev"
+    },
+    {
+      text: "The asphalt paving work done in Mandya city limits has significantly improved traffic flow. Tejashwi's modern machinery and skilled operators ensured a flawless finish.",
+      photo: client2,
+      name: "Suresh H.K.",
+      role: "Mandya District PWD"
+    },
+    {
+      text: "We contracted them for a major highway expansion connecting Mysore and Srirangapatna. Their professionalism, safety standards, and engineering excellence exceeded our expectations.",
+      photo: client3,
+      name: "Priya N.",
+      role: "Project Director, Highway Authority"
+    }
+  ]);
+
+  const ctaTitle = useSiteContent('home.cta.headline', 'Ready to Build?');
+  const ctaDesc = useSiteContent('home.cta.description', 'Partner with TEJASHWI for your next major infrastructure or paving project. We bring the machinery, the expertise, and the legacy of excellence.');
+  const ctaBtnText = useSiteContent('home.cta.buttonText', 'Start Your Project');
+  const ctaBtnLink = useSiteContent('home.cta.buttonLink', '/contact');
+  const ctaBgImg = useSiteContent('home.cta.bgImage', ctaBg);
+
+  const slides = (heroSlides && heroSlides.length > 0) ? heroSlides : heroImages;
+
   useEffect(() => {
+    if (slides.length <= 1) return;
     const timer = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % heroImages.length);
+      setCurrentImage((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   return (
     <div className="flex flex-col min-h-screen bg-white overflow-x-hidden">
@@ -125,7 +227,7 @@ export const Home = () => {
               className="absolute inset-0 w-full h-full"
             >
               <img 
-                src={heroImages[currentImage]} 
+                src={slides[currentImage] || heroImages[0]} 
                 alt="Construction background" 
                 className="w-full h-full object-cover" 
               />
@@ -144,33 +246,32 @@ export const Home = () => {
               <motion.div variants={fadeInUp} className="inline-flex items-center gap-3 lg:gap-4 mb-6 lg:mb-8">
                 <div className="h-[2px] w-8 lg:w-12 bg-accent-500" />
                 <span className="text-accent-500 font-bold tracking-[0.2em] lg:tracking-[0.25em] uppercase text-xs lg:text-sm">
-                  Premium Infrastructure Solutions
+                  {heroBadge}
                 </span>
               </motion.div>
               
-              <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-[84px] font-bold text-white mb-6 lg:mb-8 leading-[1.1] lg:leading-[1.05] tracking-tight">
-                Building Roads.<br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-100 to-brand-300">Connecting Progress.</span>
+              <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-[84px] font-bold text-white mb-6 lg:mb-8 leading-[1.1] lg:leading-[1.05] tracking-tight whitespace-pre-line">
+                {heroHeadline}
               </motion.h1>
 
               <motion.p variants={fadeInUp} className="text-lg md:text-xl lg:text-2xl text-brand-100/90 mb-10 lg:mb-14 max-w-2xl font-light leading-relaxed border-l-[3px] border-accent-500 pl-4 lg:pl-6">
-                Delivering premium asphalt paving, structural road construction, and comprehensive infrastructure solutions engineered for durability and scale.
+                {heroDesc}
               </motion.p>
               
               <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 lg:gap-6">
-                <Link to="/projects">
+                <Link to={heroPrimaryLink}>
                   <button className="group relative overflow-hidden rounded-[8px] bg-accent-500 px-10 h-16 transition-all duration-500 hover:shadow-[0_8px_30px_rgba(217,119,6,0.3)] hover:-translate-y-0.5 flex items-center justify-center w-full sm:w-auto">
                     <span className="relative z-10 flex items-center gap-3 text-[15px] font-bold tracking-wider text-brand-950 uppercase transition-colors duration-500 group-hover:text-white">
-                      Explore Projects
+                      {heroPrimaryText}
                       <ArrowRight className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-1" />
                     </span>
                     <div className="absolute inset-0 z-0 h-full w-full bg-brand-950 translate-y-[101%] transition-transform duration-500 ease-[0.16,1,0.3,1] group-hover:translate-y-0" />
                   </button>
                 </Link>
-                <Link to="/contact">
+                <Link to={heroSecondaryLink}>
                   <button className="group relative overflow-hidden rounded-[8px] border border-white/20 bg-white/5 backdrop-blur-md px-10 h-16 transition-all duration-500 hover:bg-white/10 hover:border-white/40 hover:-translate-y-0.5 flex items-center justify-center w-full sm:w-auto">
                     <span className="relative z-10 text-[15px] font-bold tracking-wider text-white uppercase transition-colors duration-500 group-hover:text-accent-100">
-                      Request a Quote
+                      {heroSecondaryText}
                     </span>
                   </button>
                 </Link>
@@ -194,7 +295,7 @@ export const Home = () => {
               className="w-full lg:w-[60%] relative z-0"
             >
               <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden shadow-[0_20px_60px_rgb(0,0,0,0.12)]">
-                <img src={aboutImg} alt="Engineering Team" className="w-full h-full object-cover" />
+                <img src={legacyImg} alt="Engineering Team" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-950/60 via-brand-950/10 to-transparent mix-blend-multiply" />
                 <div className="absolute inset-0 border border-brand-950/10 rounded-[24px]" />
               </div>
@@ -203,7 +304,7 @@ export const Home = () => {
               <div className="absolute bottom-8 left-8 bg-[#FDFBF7]/90 backdrop-blur-md px-5 py-3 rounded-[8px] shadow-lg border border-brand-950/5 flex items-center gap-3">
                 <div className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse" />
                 <span className="text-[10px] font-bold tracking-[0.2em] text-brand-950 uppercase">
-                  TEJASHWI / Field Operations
+                  {legacyTag}
                 </span>
               </div>
             </motion.div>
@@ -220,33 +321,22 @@ export const Home = () => {
                 
                 {/* Section Label */}
                 <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }} className="flex items-center gap-4 mb-8">
-                  <span className="text-[12px] font-bold tracking-[0.2em] text-brand-400 uppercase">01</span>
+                  <span className="text-[12px] font-bold tracking-[0.2em] text-brand-400 uppercase">{legacyNum}</span>
                   <div className="h-[1px] w-12 bg-brand-200" />
-                  <span className="text-[12px] font-bold tracking-[0.2em] text-brand-950 uppercase">Our Legacy</span>
+                  <span className="text-[12px] font-bold tracking-[0.2em] text-brand-950 uppercase">{legacyBadge}</span>
                 </motion.div>
                 
-                <motion.h2 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }} className="text-4xl md:text-5xl lg:text-[52px] font-bold text-brand-950 mb-8 leading-[1.1] tracking-tight">
-                  Engineering <br/>
-                  <span className="text-brand-600 font-light italic">excellence.</span>
+                <motion.h2 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }} className="text-4xl md:text-5xl lg:text-[52px] font-bold text-brand-950 mb-8 leading-[1.1] tracking-tight whitespace-pre-line">
+                  {legacyHeadline}
                 </motion.h2>
                 
-                <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }} className="space-y-6 text-[17px] text-brand-700/80 mb-12 font-light leading-relaxed">
-                  <p>
-                    TEJASHWI stands at the forefront of modern infrastructure development. We specialize in heavy civil construction, delivering robust road networks that power economies and connect communities.
-                  </p>
-                  <p>
-                    Our commitment to utilizing cutting-edge machinery and premium materials ensures that every project, from vast highways to intricate urban developments, is engineered for generations.
-                  </p>
+                <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }} className="space-y-6 text-[17px] text-brand-700/80 mb-12 font-light leading-relaxed whitespace-pre-line">
+                  {legacyBody}
                 </motion.div>
                 
                 {/* Staggered Statistics */}
                 <div className="grid grid-cols-2 gap-8 mb-12 border-t border-brand-950/10 pt-8">
-                  {[
-                    { label: 'Years Experience', val: '15+' },
-                    { label: 'Projects Completed', val: '120+' },
-                    { label: 'Heavy Machines', val: '40+' },
-                    { label: 'Regions Served', val: 'Multiple' },
-                  ].map((m, i) => (
+                  {(legacyStats || []).map((m: any, i: number) => (
                     <motion.div 
                       key={i} 
                       variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
@@ -264,7 +354,7 @@ export const Home = () => {
                 <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}>
                   <Link to="/about" className="group inline-flex items-center gap-4">
                     <span className="text-[13px] font-bold tracking-[0.15em] text-brand-950 uppercase group-hover:text-accent-600 transition-colors">
-                      Discover Our Story
+                      {legacyCtaText}
                     </span>
                     <div className="w-10 h-10 rounded-full border border-brand-200 flex items-center justify-center group-hover:border-accent-500 group-hover:bg-accent-500 transition-all duration-300">
                       <ArrowRight className="w-4 h-4 text-brand-950 group-hover:text-white group-hover:translate-x-0.5 transition-transform" />
@@ -283,17 +373,16 @@ export const Home = () => {
           {/* Asymmetric Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
             <div className="flex items-center gap-4">
-              <span className="text-[12px] font-bold tracking-[0.2em] text-brand-400 uppercase">02</span>
+              <span className="text-[12px] font-bold tracking-[0.2em] text-brand-400 uppercase">{servicesNum}</span>
               <div className="h-[1px] w-12 bg-brand-200" />
-              <span className="text-[12px] font-bold tracking-[0.2em] text-brand-950 uppercase">What We Do</span>
+              <span className="text-[12px] font-bold tracking-[0.2em] text-brand-950 uppercase">{servicesBadge}</span>
             </div>
             <div className="max-w-xl md:text-right">
-              <h2 className="text-4xl md:text-5xl font-bold text-brand-950 mb-4 leading-[1.1] tracking-tight">
-                Advanced infrastructure <br/>
-                <span className="font-light italic text-brand-600">solutions built for lasting performance.</span>
+              <h2 className="text-4xl md:text-5xl font-bold text-brand-950 mb-4 leading-[1.1] tracking-tight whitespace-pre-line">
+                {servicesHeadline}
               </h2>
               <p className="text-brand-700/80 font-light text-lg">
-                Delivering high-capacity construction services across multiple engineering disciplines.
+                {servicesSub}
               </p>
             </div>
           </div>
@@ -302,7 +391,7 @@ export const Home = () => {
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-stretch">
             {/* Left: Navigation List */}
             <div className="w-full lg:w-[40%] flex flex-col justify-center">
-              {showcaseServices.map((service, index) => {
+              {(servicesList || []).map((service: any, index: number) => {
                 const isActive = activeService === index;
                 return (
                   <div 
@@ -349,9 +438,11 @@ export const Home = () => {
                             <p className="text-brand-700/80 font-light mt-4 pl-14 text-sm leading-relaxed pr-8">
                               {service.desc}
                             </p>
-                            <Link to={service.link} className="inline-block mt-4 pl-14 text-[11px] font-bold tracking-[0.15em] uppercase text-brand-950 hover:text-accent-600 transition-colors">
-                              Explore Service &rarr;
-                            </Link>
+                            {service.link && (
+                              <Link to={service.link} className="inline-block mt-4 pl-14 text-[11px] font-bold tracking-[0.15em] uppercase text-brand-950 hover:text-accent-600 transition-colors">
+                                Explore Service &rarr;
+                              </Link>
+                            )}
                           </motion.div>
                         )}
                       </AnimatePresence>
@@ -364,17 +455,19 @@ export const Home = () => {
             {/* Right: Image Presentation */}
             <div className="w-full lg:w-[60%] h-[350px] lg:h-[700px] relative rounded-[20px] lg:rounded-[28px] overflow-hidden shadow-[0_20px_60px_rgb(0,0,0,0.08)] bg-brand-100">
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeService}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <img src={showcaseServices[activeService].img} alt={showcaseServices[activeService].title} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-950/40 via-brand-950/10 to-transparent mix-blend-multiply" />
-                </motion.div>
+                {servicesList && servicesList[activeService] && (
+                  <motion.div
+                    key={activeService}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute inset-0 w-full h-full"
+                  >
+                    <img src={servicesList[activeService].img || serviceConst} alt={servicesList[activeService].title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-950/40 via-brand-950/10 to-transparent mix-blend-multiply" />
+                  </motion.div>
+                )}
               </AnimatePresence>
             </div>
           </div>
@@ -388,18 +481,18 @@ export const Home = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 lg:mb-20 gap-6 border-b border-brand-950/10 pb-8">
             <div>
               <div className="flex items-center gap-4 mb-4">
-                <span className="text-[12px] font-bold tracking-[0.2em] text-brand-400 uppercase">03</span>
+                <span className="text-[12px] font-bold tracking-[0.2em] text-brand-400 uppercase">{projectsNum}</span>
                 <div className="h-[1px] w-12 bg-brand-200" />
-                <span className="text-[12px] font-bold tracking-[0.2em] text-brand-950 uppercase">Selected Work</span>
+                <span className="text-[12px] font-bold tracking-[0.2em] text-brand-950 uppercase">{projectsBadge}</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-brand-950 mb-4 tracking-tight">Featured <br/>Projects</h2>
+              <h2 className="text-4xl md:text-5xl font-bold text-brand-950 mb-4 tracking-tight">{projectsHeadline}</h2>
               <p className="text-brand-700/80 font-light text-[17px] max-w-md">
-                A selection of infrastructure projects engineered for scale, durability and long-term performance.
+                {projectsDesc}
               </p>
             </div>
             <Link to="/projects" className="group inline-flex items-center gap-4 border-b border-brand-950 pb-2 hover:border-accent-600 transition-colors">
               <span className="text-[12px] font-bold tracking-[0.2em] text-brand-950 uppercase group-hover:text-accent-600 transition-colors">
-                View All Projects
+                {projectsViewAll}
               </span>
               <ArrowRight className="w-4 h-4 text-brand-950 group-hover:text-accent-600 group-hover:translate-x-1 transition-transform" />
             </Link>
@@ -410,7 +503,7 @@ export const Home = () => {
             
             {/* Left: Project Navigation */}
             <div className="w-full lg:w-[35%] flex flex-col gap-2 relative z-10">
-              {showcaseProjects.map((proj, idx) => {
+              {(projectsList || []).map((proj: any, idx: number) => {
                 const isActive = activeProject === idx;
                 return (
                   <div 
@@ -441,50 +534,54 @@ export const Home = () => {
             <div className="w-full lg:w-[65%] relative z-0">
               <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-[0_30px_80px_rgb(0,0,0,0.15)] bg-brand-100">
                 <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeProject}
-                    initial={{ opacity: 0, scale: 1.05 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-0 w-full h-full"
-                  >
-                    <img src={showcaseProjects[activeProject].img} alt={showcaseProjects[activeProject].title} className="w-full h-full object-cover" />
-                  </motion.div>
+                  {projectsList && projectsList[activeProject] && (
+                    <motion.div
+                      key={activeProject}
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute inset-0 w-full h-full"
+                    >
+                      <img src={projectsList[activeProject].img || projectHighway} alt={projectsList[activeProject].title} className="w-full h-full object-cover" />
+                    </motion.div>
+                  )}
                 </AnimatePresence>
                 <div className="absolute inset-0 border border-brand-950/5 rounded-[32px] pointer-events-none" />
               </div>
 
               {/* Information Panel */}
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeProject}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                  className="absolute -bottom-8 -left-2 lg:-bottom-12 lg:-left-12 bg-[#FDFBF7] p-8 md:p-10 rounded-[24px] shadow-[0_20px_40px_rgb(0,0,0,0.06)] border border-brand-950/10 max-w-xs md:max-w-sm z-10"
-                >
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent-500" />
-                    <span className="text-[10px] font-bold tracking-[0.2em] text-brand-500 uppercase">
-                      {showcaseProjects[activeProject].status}
-                    </span>
-                  </div>
-                  
-                  <h3 className="text-xl md:text-2xl font-bold text-brand-950 mb-6 leading-tight">
-                    {showcaseProjects[activeProject].title}
-                  </h3>
-                  
-                  <div className="flex flex-col gap-2 mb-8">
-                    <span className="text-sm font-light text-brand-600 flex items-center gap-2"><MapPin className="w-4 h-4"/> {showcaseProjects[activeProject].loc}</span>
-                    <span className="text-sm font-light text-brand-600 flex items-center gap-2"><HardHat className="w-4 h-4"/> {showcaseProjects[activeProject].type}</span>
-                  </div>
-                  
-                  <Link to="/projects" className="inline-flex items-center gap-3 text-[11px] font-bold tracking-[0.15em] uppercase text-brand-950 hover:text-accent-600 transition-colors group">
-                    View Project <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </motion.div>
+                {projectsList && projectsList[activeProject] && (
+                  <motion.div
+                    key={activeProject}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                    className="absolute -bottom-8 -left-2 lg:-bottom-12 lg:-left-12 bg-[#FDFBF7] p-8 md:p-10 rounded-[24px] shadow-[0_20px_40px_rgb(0,0,0,0.06)] border border-brand-950/10 max-w-xs md:max-w-sm z-10"
+                  >
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent-500" />
+                      <span className="text-[10px] font-bold tracking-[0.2em] text-brand-500 uppercase">
+                        {projectsList[activeProject].status}
+                      </span>
+                    </div>
+                    
+                    <h3 className="text-xl md:text-2xl font-bold text-brand-950 mb-6 leading-tight">
+                      {projectsList[activeProject].title}
+                    </h3>
+                    
+                    <div className="flex flex-col gap-2 mb-8">
+                      <span className="text-sm font-light text-brand-600 flex items-center gap-2"><MapPin className="w-4 h-4"/> {projectsList[activeProject].loc}</span>
+                      <span className="text-sm font-light text-brand-600 flex items-center gap-2"><HardHat className="w-4 h-4"/> {projectsList[activeProject].type}</span>
+                    </div>
+                    
+                    <Link to="/projects" className="inline-flex items-center gap-3 text-[11px] font-bold tracking-[0.15em] uppercase text-brand-950 hover:text-accent-600 transition-colors group">
+                      View Project <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </motion.div>
+                )}
               </AnimatePresence>
             </div>
 
@@ -496,29 +593,32 @@ export const Home = () => {
       <section className="section-padding bg-brand-950 text-white">
         <div className="container-custom">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">The Apex Advantage</h2>
-            <p className="text-xl text-brand-200 font-light">Uncompromising standards. Precision engineering. Superior results.</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">{whyTitle}</h2>
+            <p className="text-xl text-brand-200 font-light">{whySub}</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {[
-              { title: 'Experienced Team', icon: <HardHat className="w-10 h-10" /> },
-              { title: 'Modern Equipment', icon: <Settings className="w-10 h-10" /> },
-              { title: 'Quality Materials', icon: <Award className="w-10 h-10" /> },
-              { title: 'Safety First', icon: <ShieldCheck className="w-10 h-10" /> },
-              { title: 'On-Time Delivery', icon: <Clock className="w-10 h-10" /> },
-              { title: 'Engineering Expertise', icon: <TrendingUp className="w-10 h-10" /> },
-            ].map((feature, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex gap-6">
-                <div className="text-brand-500 shrink-0">{feature.icon}</div>
-                <div>
-                  <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                  <p className="text-brand-300 leading-relaxed text-sm">
-                    Leveraging industry best practices to deliver outstanding results that exceed client expectations every time.
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+            {(whyCards || []).map((feature: any, i: number) => {
+              const defaultIcons = [
+                <HardHat className="w-10 h-10" />,
+                <Settings className="w-10 h-10" />,
+                <Award className="w-10 h-10" />,
+                <ShieldCheck className="w-10 h-10" />,
+                <Clock className="w-10 h-10" />,
+                <TrendingUp className="w-10 h-10" />
+              ];
+              return (
+                <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex gap-6">
+                  <div className="text-brand-500 shrink-0">{defaultIcons[i % defaultIcons.length]}</div>
+                  <div>
+                    <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+                    <p className="text-brand-300 leading-relaxed text-sm">
+                      {feature.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -526,7 +626,7 @@ export const Home = () => {
       {/* SECTION 6 - EQUIPMENT */}
       <section className="py-16 lg:py-24 bg-brand-50 overflow-hidden">
         <div className="container-custom mb-12">
-          <h2 className="text-4xl font-bold text-brand-950">Our Heavy Machinery</h2>
+          <h2 className="text-4xl font-bold text-brand-950">{machineryTitle}</h2>
         </div>
         
         <div className="relative w-full overflow-hidden flex">
@@ -535,23 +635,11 @@ export const Home = () => {
             animate={{ x: ["0%", "-50%"] }}
             transition={{ duration: 30, ease: "linear", repeat: Infinity }}
           >
-            {[
-              { img: eqPaver, name: 'Asphalt Paver' },
-              { img: eqRoller, name: 'Road Roller' },
-              { img: eqPaver, name: 'Excavator' },
-              { img: eqRoller, name: 'Motor Grader' },
-              { img: eqPaver, name: 'Tipper Truck' },
-              // Duplicate the list to create a seamless infinite loop
-              { img: eqPaver, name: 'Asphalt Paver' },
-              { img: eqRoller, name: 'Road Roller' },
-              { img: eqPaver, name: 'Excavator' },
-              { img: eqRoller, name: 'Motor Grader' },
-              { img: eqPaver, name: 'Tipper Truck' },
-            ].map((eq, i) => (
+            {[...(machineryList || []), ...(machineryList || [])].map((eq: any, i: number) => (
               <div key={i} className="w-[280px] md:w-[320px] shrink-0 group">
                 <div className="bg-white p-3 rounded-2xl shadow-sm border border-brand-100 transition-all hover:shadow-xl cursor-pointer">
                   <div className="aspect-[4/3] rounded-xl overflow-hidden mb-4 bg-gray-100">
-                    <img src={eq.img} alt={eq.name} className="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-105" />
+                    <img src={eq.img || eqPaver} alt={eq.name} className="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   <h3 className="text-xl font-bold text-brand-950 text-center">{eq.name}</h3>
                 </div>
@@ -565,14 +653,11 @@ export const Home = () => {
       <section className="section-padding bg-white">
         <div className="container-custom">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold text-brand-950">Our Construction Process</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-brand-950">{processTitle}</h2>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              'Site Survey', 'Planning', 'Site Preparation', 'Base Construction',
-              'Asphalt Paving', 'Compaction', 'Quality Inspection', 'Completion'
-            ].map((step, i) => (
+            {(processSteps || []).map((step: string, i: number) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="relative group">
                 <div className="text-6xl font-black text-brand-50 mb-4 transition-colors group-hover:text-brand-100">
                   {String(i + 1).padStart(2, '0')}
@@ -589,10 +674,9 @@ export const Home = () => {
       <section className="py-20 bg-brand-50 border-y border-brand-100">
         <div className="container-custom">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <AnimatedCounter end={120} suffix="+" title="Completed Projects" />
-            <AnimatedCounter end={15} suffix="+" title="Years Experience" />
-            <AnimatedCounter end={40} suffix="+" title="Heavy Machines" />
-            <AnimatedCounter end={98} suffix="%" title="On-Time Completion" />
+            {(statsList || []).map((s: any, idx: number) => (
+              <AnimatedCounter key={idx} end={Number(s.end) || 0} suffix={s.suffix || ''} title={s.title || ''} />
+            ))}
           </div>
         </div>
       </section>
@@ -600,28 +684,11 @@ export const Home = () => {
       {/* SECTION 9 - TESTIMONIALS */}
       <section className="py-16 lg:py-32 bg-white">
         <div className="container-custom">
-          <h2 className="text-4xl md:text-5xl font-bold text-brand-950 text-center mb-12 lg:mb-16 tracking-tight">Client Testimonials</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-brand-950 text-center mb-12 lg:mb-16 tracking-tight">
+            {testimonialsTitle}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {[
-              {
-                text: "Tejashwi Constructions delivered exceptional quality on the Mysore Ring Road resurfacing. Their team's dedication to timelines and material quality is unmatched in the region.",
-                photo: client1,
-                name: "Ramesh Gowda",
-                role: "Chief Engineer, Mysore Infrastructure Dev"
-              },
-              {
-                text: "The asphalt paving work done in Mandya city limits has significantly improved traffic flow. Tejashwi's modern machinery and skilled operators ensured a flawless finish.",
-                photo: client2,
-                name: "Suresh H.K.",
-                role: "Mandya District PWD"
-              },
-              {
-                text: "We contracted them for a major highway expansion connecting Mysore and Srirangapatna. Their professionalism, safety standards, and engineering excellence exceeded our expectations.",
-                photo: client3,
-                name: "Priya N.",
-                role: "Project Director, Highway Authority"
-              }
-            ].map((testimonial, i) => (
+            {(testimonialsList || []).map((testimonial: any, i: number) => (
               <Card key={i} className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-brand-50/50 hover:bg-brand-50 hover:-translate-y-2 transition-all duration-300">
                 <CardContent className="p-8">
                   <Quote className="w-10 h-10 text-brand-300 mb-6" />
@@ -629,7 +696,7 @@ export const Home = () => {
                     "{testimonial.text}"
                   </p>
                   <div className="flex items-center gap-4">
-                    <img src={testimonial.photo} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover border border-brand-100 shadow-sm" />
+                    <img src={testimonial.photo || client1} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover border border-brand-100 shadow-sm" />
                     <div>
                       <div className="font-bold text-brand-950">{testimonial.name}</div>
                       <div className="text-sm text-brand-600">{testimonial.role}</div>
@@ -645,19 +712,19 @@ export const Home = () => {
       {/* SECTION 10 - CTA */}
       <section className="py-16 lg:py-24 bg-brand-950 text-[#FDFBF7] relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src={ctaBg} alt="Construction Site" className="w-full h-full object-cover opacity-20 mix-blend-luminosity" />
+          <img src={ctaBgImg} alt="Construction Site" className="w-full h-full object-cover opacity-20 mix-blend-luminosity" />
         </div>
         <div className="container-custom relative z-10 text-center max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">Ready to Build?</h2>
-          <p className="text-lg md:text-xl text-brand-100/80 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
-            Partner with TEJASHWI for your next major infrastructure or paving project. We bring the machinery, the expertise, and the legacy of excellence.
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">{ctaTitle}</h2>
+          <p className="text-lg md:text-xl text-brand-100/80 mb-10 max-w-2xl mx-auto font-light leading-relaxed whitespace-pre-line">
+            {ctaDesc}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 lg:gap-6">
             <Link 
-              to="/contact" 
+              to={ctaBtnLink} 
               className="inline-flex items-center justify-center gap-3 bg-accent-500 text-brand-950 px-8 py-4 rounded-xl font-bold tracking-widest uppercase hover:bg-accent-400 transition-colors shadow-[0_10px_30px_rgba(217,119,6,0.3)] hover:-translate-y-1 transform duration-300 w-full sm:w-auto"
             >
-              Start Your Project
+              {ctaBtnText}
             </Link>
           </div>
         </div>

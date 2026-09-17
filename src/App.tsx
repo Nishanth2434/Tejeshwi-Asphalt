@@ -15,10 +15,23 @@ import { Equipment } from './pages/Equipment';
 import { Gallery } from './pages/Gallery';
 import { Contact } from './pages/Contact';
 
+// Admin CMS Studio
+import { AdminLayout } from './components/admin/AdminLayout';
+import { WebsiteContentPage } from './pages/admin/WebsiteContentPage';
+import { NavigationPage } from './pages/admin/NavigationPage';
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Admin CMS Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="/admin/website" replace />} />
+          <Route path="website" element={<WebsiteContentPage />} />
+          <Route path="website/navigation" element={<NavigationPage />} />
+        </Route>
+
+        {/* Public Website Routes */}
         <Route path="/" element={<PageLayout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
@@ -40,5 +53,6 @@ function App() {
     </BrowserRouter>
   );
 }
+
 
 export default App;

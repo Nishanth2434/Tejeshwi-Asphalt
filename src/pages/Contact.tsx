@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle2, Loader2 } from 'lucide-react';
+import { MapPin, Phone, Mail, Send, CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { useSiteContent } from '../lib/getContent';
 import ctaBg from '../assets/images/hero/cta_bg.jpg';
 
 const fadeInUp: Variants = {
@@ -17,6 +18,23 @@ const staggerContainer: Variants = {
 export const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  // Dynamic Content Hooks
+  const heroBadge = useSiteContent('contact.hero.badge', 'Get In Touch');
+  const heroHeadline = useSiteContent('contact.hero.headline', "Let's Build Something That Lasts.");
+  const infoTitle = useSiteContent('contact.info.title', 'Contact Information');
+  const addressTitle = useSiteContent('contact.info.addressTitle', 'Corporate Headquarters');
+  const address = useSiteContent('contact.info.address', 'Level 4, Apex Tower\nPlot 45, Infrastructure Tech Park\nMumbai, MH 400001');
+  const phoneTitle = useSiteContent('contact.info.phoneTitle', 'Direct Line');
+  const phone = useSiteContent('contact.info.phone', '+91 (800) 123-4567');
+  const hours = useSiteContent('contact.info.hours', 'Mon-Sat: 8AM - 6PM');
+  const emailTitle = useSiteContent('contact.info.emailTitle', 'Email Inquiries');
+  const emails = useSiteContent<string[]>('contact.info.emails', ['projects@apexinfra.com', 'careers@apexinfra.com']);
+  const mapBadge = useSiteContent('contact.map.badge', 'HQ Location Map');
+  const formTitle = useSiteContent('contact.form.title', 'Request a Quote');
+  const formSubtitle = useSiteContent('contact.form.subtitle', 'Fill out the details below and our estimators will get back to you promptly.');
+  const submitButtonText = useSiteContent('contact.form.submitButtonText', 'Submit Quote Request');
+  const privacyNotice = useSiteContent('contact.form.privacyNotice', 'By submitting this form, you agree to our privacy policy. Your information is strictly confidential.');
 
   // Form State
   const [formData, setFormData] = useState({
@@ -42,8 +60,6 @@ export const Contact = () => {
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSuccess(true);
-      // Reset form if we wanted to allow multiple submissions:
-      // setFormData({ ... })
     }, 1500);
   };
 
@@ -60,10 +76,10 @@ export const Contact = () => {
         <div className="container-custom relative z-10 w-full text-center max-w-4xl mx-auto">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
             <motion.div variants={fadeInUp} className="mb-4">
-              <span className="text-brand-400 font-bold tracking-widest uppercase text-sm">Get In Touch</span>
+              <span className="text-brand-400 font-bold tracking-widest uppercase text-sm">{heroBadge}</span>
             </motion.div>
-            <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Let's Build Something <span className="text-brand-400">That Lasts.</span>
+            <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight whitespace-pre-line">
+              {heroHeadline}
             </motion.h1>
           </motion.div>
         </div>
@@ -80,15 +96,15 @@ export const Contact = () => {
               {/* Info Cards */}
               <div className="bg-white p-8 rounded-3xl shadow-xl border border-brand-100 space-y-8">
                 <div>
-                  <h3 className="text-2xl font-bold text-brand-950 mb-6">Contact Information</h3>
+                  <h3 className="text-2xl font-bold text-brand-950 mb-6">{infoTitle}</h3>
                   <div className="space-y-6">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
                         <MapPin className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-brand-950">Corporate Headquarters</h4>
-                        <p className="text-brand-600">Level 4, Apex Tower<br/>Plot 45, Infrastructure Tech Park<br/>Mumbai, MH 400001</p>
+                        <h4 className="font-bold text-brand-950">{addressTitle}</h4>
+                        <p className="text-brand-600 whitespace-pre-line">{address}</p>
                       </div>
                     </div>
                     
@@ -97,8 +113,8 @@ export const Contact = () => {
                         <Phone className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-brand-950">Direct Line</h4>
-                        <p className="text-brand-600">+91 (800) 123-4567<br/>Mon-Sat: 8AM - 6PM</p>
+                        <h4 className="font-bold text-brand-950">{phoneTitle}</h4>
+                        <p className="text-brand-600">{phone}<br/>{hours}</p>
                       </div>
                     </div>
 
@@ -107,8 +123,12 @@ export const Contact = () => {
                         <Mail className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-brand-950">Email Inquiries</h4>
-                        <p className="text-brand-600">projects@apexinfra.com<br/>careers@apexinfra.com</p>
+                        <h4 className="font-bold text-brand-950">{emailTitle}</h4>
+                        <p className="text-brand-600">
+                          {(Array.isArray(emails) ? emails : [emails]).map((e: string, idx: number) => (
+                            <span key={idx} className="block">{e}</span>
+                          ))}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -127,12 +147,13 @@ export const Contact = () => {
                     <div className="absolute inset-0 bg-brand-500 rounded-full animate-ping opacity-75" />
                   </div>
                   <div className="mt-4 bg-white/90 backdrop-blur px-4 py-2 rounded-lg font-bold text-brand-950 shadow-sm border border-brand-100 text-sm">
-                    HQ Location Map
+                    {mapBadge}
                   </div>
                 </div>
               </div>
 
             </motion.div>
+
 
             {/* RIGHT COLUMN - THE FORM */}
             <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="lg:col-span-7 bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-brand-100">
@@ -166,8 +187,8 @@ export const Contact = () => {
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-3xl font-bold text-brand-950 mb-2">Request a Quote</h2>
-                      <p className="text-brand-600 mb-8">Fill out the details below and our estimators will get back to you promptly.</p>
+                      <h2 className="text-3xl font-bold text-brand-950 mb-2">{formTitle}</h2>
+                      <p className="text-brand-600 mb-8">{formSubtitle}</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6">
@@ -224,11 +245,11 @@ export const Contact = () => {
                       {isSubmitting ? (
                         <><Loader2 className="w-5 h-5 animate-spin" /> Submitting Request...</>
                       ) : (
-                        <><Send className="w-5 h-5" /> Submit Quote Request</>
+                        <><Send className="w-5 h-5" /> {submitButtonText}</>
                       )}
                     </Button>
                     <p className="text-xs text-center text-brand-400 mt-4">
-                      By submitting this form, you agree to our privacy policy. Your information is strictly confidential.
+                      {privacyNotice}
                     </p>
                   </motion.form>
                 )}

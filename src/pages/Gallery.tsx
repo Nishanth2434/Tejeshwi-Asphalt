@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Filter, Search } from 'lucide-react';
 import { mockGallery } from '../data/mockData';
+import { useSiteContent } from '../lib/getContent';
 
-const categories = ['All', 'Road Construction', 'Asphalt Work', 'Machinery', 'Team', 'Completed Projects', 'Before & After'];
+const defaultCategories = ['All', 'Road Construction', 'Asphalt Work', 'Machinery', 'Team', 'Completed Projects', 'Before & After'];
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -11,6 +12,10 @@ const fadeInUp: Variants = {
 };
 
 export const Gallery = () => {
+  const heroHeadline = useSiteContent('gallery.hero.headline', 'Visual Gallery');
+  const heroDesc = useSiteContent('gallery.hero.description', 'A showcase of our engineering precision, heavy machinery, and dedicated teams in action.');
+  const categories = useSiteContent<string[]>('gallery.categories', defaultCategories);
+
   const [filter, setFilter] = useState('All');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -37,8 +42,8 @@ export const Gallery = () => {
       <section className="py-12 bg-white">
         <div className="container-custom text-center max-w-3xl mx-auto">
           <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-            <h1 className="text-4xl md:text-6xl font-bold text-brand-950 mb-6">Visual Gallery</h1>
-            <p className="text-xl text-brand-600">A showcase of our engineering precision, heavy machinery, and dedicated teams in action.</p>
+            <h1 className="text-4xl md:text-6xl font-bold text-brand-950 mb-6 whitespace-pre-line">{heroHeadline}</h1>
+            <p className="text-xl text-brand-600">{heroDesc}</p>
           </motion.div>
         </div>
       </section>
@@ -66,6 +71,7 @@ export const Gallery = () => {
           </div>
         </div>
       </section>
+
 
       {/* Masonry Grid */}
       <section className="px-4 md:px-8">

@@ -5,6 +5,7 @@ import { mockEquipment } from '../data/mockData';
 import ctaBg from '../assets/images/hero/cta_bg.jpg';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
+import { useSiteContent } from '../lib/getContent';
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -17,6 +18,13 @@ const staggerContainer: Variants = {
 };
 
 export const Equipment = () => {
+  const heroBadge = useSiteContent('equipment.hero.badge', 'Machinery & Assets');
+  const heroHeadline = useSiteContent('equipment.hero.headline', 'Powering Progress with Precision.');
+  const heroDesc = useSiteContent('equipment.hero.description', 'Our fleet of state-of-the-art construction machinery guarantees unmatched efficiency, quality, and safety on every site.');
+  const fleetHeadline = useSiteContent('equipment.showcase.headline', 'The Apex Fleet');
+  const ctaHeadline = useSiteContent('equipment.cta.headline', 'Need Heavy Machinery for Your Project?');
+  const ctaButtonText = useSiteContent('equipment.cta.buttonText', 'Contact Us Today');
+
   return (
     <div className="bg-white min-h-screen flex flex-col">
       {/* SECTION 1 - HERO */}
@@ -29,13 +37,13 @@ export const Equipment = () => {
         <div className="container-custom relative z-10 w-full text-center max-w-4xl mx-auto">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
             <motion.div variants={fadeInUp} className="mb-4">
-              <span className="text-brand-400 font-bold tracking-widest uppercase text-sm">Machinery & Assets</span>
+              <span className="text-brand-400 font-bold tracking-widest uppercase text-sm">{heroBadge}</span>
             </motion.div>
-            <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Powering Progress with <span className="text-brand-400">Precision.</span>
+            <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight whitespace-pre-line">
+              {heroHeadline}
             </motion.h1>
             <motion.p variants={fadeInUp} className="text-xl text-brand-200">
-              Our fleet of state-of-the-art construction machinery guarantees unmatched efficiency, quality, and safety on every site.
+              {heroDesc}
             </motion.p>
           </motion.div>
         </div>
@@ -46,7 +54,7 @@ export const Equipment = () => {
         <div className="container-custom">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-4xl font-bold text-brand-950 flex items-center justify-center gap-4">
-              <Wrench className="w-10 h-10 text-brand-500" /> The Apex Fleet
+              <Wrench className="w-10 h-10 text-brand-500" /> {fleetHeadline}
             </h2>
           </div>
 
@@ -101,10 +109,10 @@ export const Equipment = () => {
           <div className="absolute inset-0 bg-brand-900/80" />
         </div>
         <div className="container-custom relative z-10 text-center max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-6xl font-bold text-white mb-6 px-4">Need Heavy Machinery for Your Project?</h2>
+          <h2 className="text-3xl md:text-6xl font-bold text-white mb-6 px-4">{ctaHeadline}</h2>
           <Link to="/contact">
             <Button size="lg" className="bg-brand-500 hover:bg-brand-400 text-white rounded-none h-14 px-10 text-lg">
-              Contact Us Today
+              {ctaButtonText}
             </Button>
           </Link>
         </div>
@@ -112,3 +120,4 @@ export const Equipment = () => {
     </div>
   );
 };
+

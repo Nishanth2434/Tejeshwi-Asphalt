@@ -3,6 +3,7 @@ import { motion, type Variants } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { HardHat, ArrowRight, TrendingUp, Clock, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { useSiteContent } from '../lib/getContent';
 
 // Asset Imports
 import heroBg from '../assets/images/services/service_construction.jpg';
@@ -20,6 +21,12 @@ const staggerContainer: Variants = {
 };
 
 export const Services = () => {
+  const heroBadge = useSiteContent('services.hero.badge', 'Capabilities');
+  const heroHeadline = useSiteContent('services.hero.headline', 'Comprehensive Infrastructure Solutions.');
+  const heroDesc = useSiteContent('services.hero.description', 'From greenfield highway construction to precision asphalt paving, we deliver engineering excellence at every scale.');
+  const ctaHeadline = useSiteContent('services.cta.headline', 'Ready to break ground?');
+  const ctaButtonText = useSiteContent('services.cta.buttonText', 'Get a Quote Today');
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       
@@ -33,17 +40,18 @@ export const Services = () => {
         <div className="container-custom relative z-10 w-full text-center max-w-4xl mx-auto">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
             <motion.div variants={fadeInUp} className="mb-4">
-              <span className="text-brand-400 font-bold tracking-widest uppercase text-sm">Capabilities</span>
+              <span className="text-brand-400 font-bold tracking-widest uppercase text-sm">{heroBadge}</span>
             </motion.div>
-            <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Comprehensive <span className="text-brand-400">Infrastructure</span> Solutions.
+            <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight whitespace-pre-line">
+              {heroHeadline}
             </motion.h1>
             <motion.p variants={fadeInUp} className="text-xl text-brand-200">
-              From greenfield highway construction to precision asphalt paving, we deliver engineering excellence at every scale.
+              {heroDesc}
             </motion.p>
           </motion.div>
         </div>
       </section>
+
 
       {/* SECTION 2 - SERVICES OVERVIEW GRID */}
       <section className="section-padding bg-brand-50">
@@ -134,10 +142,10 @@ export const Services = () => {
           <div className="absolute inset-0 bg-brand-900/80" />
         </div>
         <div className="container-custom relative z-10 text-center max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">Ready to break ground?</h2>
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 whitespace-pre-line">{ctaHeadline}</h2>
           <Link to="/contact">
             <Button size="lg" className="bg-brand-500 hover:bg-brand-400 text-white rounded-none h-14 px-10 text-lg">
-              Get a Quote Today
+              {ctaButtonText}
             </Button>
           </Link>
         </div>

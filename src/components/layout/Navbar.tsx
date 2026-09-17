@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, Phone, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../utils/cn';
+import { useSiteContent, useNavItems } from '../../lib/getContent';
 
 const NavLink = ({ 
   to, 
@@ -68,9 +69,18 @@ const NavLink = ({
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const location = useLocation();
   const [logoError, setLogoError] = useState(false);
+
+  // Dynamic Site Content & Nav Items
+  const brandName = useSiteContent('nav.brand.name', 'TEJASHWI');
+  const accentLetter = useSiteContent('nav.brand.accentLetter', 'A');
+  const brandTagline = useSiteContent('nav.brand.tagline', 'Asphalt & Constructions');
+  const logoSrc = useSiteContent('nav.brand.logo', '/gsp-logo.png');
+  const ctaLabel = useSiteContent('nav.cta.label', 'Get a Quote');
+  const ctaLink = useSiteContent('nav.cta.link', '/contact');
+  const navItems = useNavItems();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,7 +92,7 @@ export const Navbar = () => {
 
   useEffect(() => {
     setIsOpen(false);
-    setServicesOpen(false);
+    setOpenDropdownId(null);
   }, [location.pathname]);
 
   const isActive = (path: string) => {
@@ -90,12 +100,19 @@ export const Navbar = () => {
     return location.pathname.startsWith(path);
   };
 
-  const servicesLinks = [
-    { name: 'Road Construction', path: '/services/road-construction' },
-    { name: 'Asphalt Paving', path: '/services/asphalt-paving' },
-    { name: 'Road Maintenance', path: '/services/road-maintenance' },
-    { name: 'Infrastructure Development', path: '/services/infrastructure' }
-  ];
+  const brandParts = React.useMemo(() => {
+    if (!accentLetter || !brandName.includes(accentLetter)) {
+      return { before: brandName, accent: '', after: '' };
+    }
+    const idx = brandName.indexOf(accentLetter);
+    return {
+      before: brandName.slice(0, idx),
+      accent: accentLetter,
+      after: brandName.slice(idx + accentLetter.length)
+    };
+  }, [brandName, accentLetter]);
+
+  const activeNavItems = (navItems || []).filter(item => item.isActive !== false);
 
   return (
     <motion.header
@@ -118,8 +135,8 @@ export const Navbar = () => {
             {!logoError ? (
               <div className="flex items-center gap-3 md:gap-4">
                 <img 
-                  src="/gsp-logo.png" 
-                  alt="GSP Constructions Logo" 
+                  src={logoSrc} 
+                  alt={`${brandName} Logo`}
                   className={cn(
                     "w-auto transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:scale-105",
                     isScrolled ? "h-7 md:h-9" : "h-8 md:h-11"
@@ -134,16 +151,24 @@ export const Navbar = () => {
                 
                 <div className="flex flex-col items-start justify-center transition-transform duration-500 group-hover:scale-[1.01] origin-left">
                   <span className="font-bold text-[14px] md:text-[18px] tracking-[0.2em] md:tracking-[0.25em] text-brand-950 leading-none mb-1 transition-colors duration-300">
-                    TEJ<span className="text-accent-500">A</span>SHWI
+                    {brandParts.accent ? (
+                      <>
+                        {brandParts.before}
+                        <span className="text-accent-500">{brandParts.accent}</span>
+                        {brandParts.after}
+                      </>
+                    ) : (
+                      brandName
+                    )}
                   </span>
                   <span className="text-[6px] md:text-[8px] font-semibold tracking-[0.15em] md:tracking-[0.2em] text-brand-500 uppercase">
-                    Asphalt & Constructions
+                    {brandTagline}
                   </span>
                 </div>
               </div>
             ) : (
               <span className="font-bold text-xl tracking-widest transition-colors text-brand-950">
-                TEJASHWI<span className="text-accent-500 ml-1">Constructions</span>
+                {brandName}
               </span>
             )}
           </Link>
@@ -151,78 +176,87 @@ export const Navbar = () => {
 
         {/* Center: Desktop Navigation (Mathematically Centered) */}
         <div className="hidden lg:flex items-center justify-center gap-0.5 xl:gap-2">
-          <NavLink to="/about" isActive={isActive('/about')}>About</NavLink>
+          {activeNavItems.map((item) => {
+            const hasChildren = item.children && item.children.length > 0;
+            const isDropdownOpen = openDropdownId === item.id;
 
-          {/* Services Dropdown */}
-          <div 
-            className="relative"
-            onMouseEnter={() => setServicesOpen(true)}
-            onMouseLeave={() => setServicesOpen(false)}
-          >
-            <button className={cn(
-              "relative flex items-center gap-1.5 px-3.5 xl:px-5 py-2 text-[13px] xl:text-[14px] font-medium tracking-[0.05em] uppercase transition-all duration-500 group whitespace-nowrap",
-              isActive('/services') || servicesOpen ? "text-brand-950" : "text-brand-600 hover:text-brand-950"
-            )}>
-              <motion.span 
-                className="relative z-10 flex items-center gap-1"
-                animate={{ y: servicesOpen ? -2 : 0 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            if (!hasChildren) {
+              return (
+                <NavLink key={item.id} to={item.href} isActive={isActive(item.href)}>
+                  {item.label}
+                </NavLink>
+              );
+            }
+
+            return (
+              <div 
+                key={item.id}
+                className="relative"
+                onMouseEnter={() => setOpenDropdownId(item.id)}
+                onMouseLeave={() => setOpenDropdownId(null)}
               >
-                Services
-                <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-500", servicesOpen && "rotate-180")} />
-              </motion.span>
-              
-              {isActive('/services') && !servicesOpen && (
-                <motion.div 
-                  layoutId="active-nav-indicator-editorial" 
-                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-accent-500 rounded-full" 
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-              )}
-            </button>
-            
-            <AnimatePresence>
-              {servicesOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 15, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.97 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 w-[300px] bg-[#FDFBF7]/95 backdrop-blur-xl rounded-[12px] shadow-[0_20px_40px_rgb(0,0,0,0.1)] border border-brand-950/5 overflow-hidden p-3"
-                >
-                  <div className="flex flex-col gap-1">
-                    {servicesLinks.map((link) => (
-                      <Link
-                        key={link.name}
-                        to={link.path}
-                        className="group/link relative flex items-center px-4 py-3 rounded-lg overflow-hidden transition-all duration-300 hover:bg-brand-50"
-                      >
-                        <div className="absolute left-0 w-[2px] h-[60%] top-1/2 -translate-y-1/2 bg-accent-500 scale-y-0 origin-center group-hover/link:scale-y-100 transition-transform duration-400 ease-[0.16,1,0.3,1] rounded-r-full" />
-                        <span className="text-[13px] font-medium tracking-wide text-brand-700 group-hover/link:text-brand-950 transition-colors z-10 group-hover/link:translate-x-2 transform duration-400 ease-[0.16,1,0.3,1]">
-                          {link.name}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <NavLink to="/projects" isActive={isActive('/projects')}>Projects</NavLink>
-          <NavLink to="/equipment" isActive={isActive('/equipment')}>Equipment</NavLink>
-          <NavLink to="/gallery" isActive={isActive('/gallery')}>Gallery</NavLink>
+                <button className={cn(
+                  "relative flex items-center gap-1.5 px-3.5 xl:px-5 py-2 text-[13px] xl:text-[14px] font-medium tracking-[0.05em] uppercase transition-all duration-500 group whitespace-nowrap",
+                  isActive(item.href) || isDropdownOpen ? "text-brand-950" : "text-brand-600 hover:text-brand-950"
+                )}>
+                  <motion.span 
+                    className="relative z-10 flex items-center gap-1"
+                    animate={{ y: isDropdownOpen ? -2 : 0 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {item.label}
+                    <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-500", isDropdownOpen && "rotate-180")} />
+                  </motion.span>
+                  
+                  {isActive(item.href) && !isDropdownOpen && (
+                    <motion.div 
+                      layoutId="active-nav-indicator-editorial" 
+                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-accent-500 rounded-full" 
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </button>
+                
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 15, scale: 0.97 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.97 }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute top-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2 w-[300px] bg-[#FDFBF7]/95 backdrop-blur-xl rounded-[12px] shadow-[0_20px_40px_rgb(0,0,0,0.1)] border border-brand-950/5 overflow-hidden p-3"
+                    >
+                      <div className="flex flex-col gap-1">
+                        {item.children?.filter(c => c.isActive !== false).map((child) => (
+                          <Link
+                            key={child.id || child.href}
+                            to={child.href}
+                            className="group/link relative flex items-center px-4 py-3 rounded-lg overflow-hidden transition-all duration-300 hover:bg-brand-50"
+                          >
+                            <div className="absolute left-0 w-[2px] h-[60%] top-1/2 -translate-y-1/2 bg-accent-500 scale-y-0 origin-center group-hover/link:scale-y-100 transition-transform duration-400 ease-[0.16,1,0.3,1] rounded-r-full" />
+                            <span className="text-[13px] font-medium tracking-wide text-brand-700 group-hover/link:text-brand-950 transition-colors z-10 group-hover/link:translate-x-2 transform duration-400 ease-[0.16,1,0.3,1]">
+                              {child.label}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </div>
 
         {/* Right: CTA Area on Desktop & Mobile Menu Toggle on Mobile */}
         <div className="flex items-center justify-end">
-          <Link to="/contact" className="hidden lg:block">
+          <Link to={ctaLink} className="hidden lg:block">
             <button className={cn(
               "group relative overflow-hidden bg-brand-950 text-[#FDFBF7] font-semibold text-[12px] xl:text-[13px] tracking-widest uppercase transition-all duration-500 hover:shadow-[0_8px_20px_rgb(3,7,18,0.15)]",
               isScrolled ? "rounded-[12px] px-5 xl:px-7 py-2.5" : "rounded-[14px] px-6 xl:px-8 py-3"
             )}>
               <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white whitespace-nowrap">
-                Get a Quote
+                {ctaLabel}
               </span>
               <div className="absolute inset-0 z-0 h-full w-full bg-accent-500 translate-y-[101%] transition-transform duration-500 ease-[0.16,1,0.3,1] group-hover:translate-y-0" />
             </button>
@@ -251,55 +285,57 @@ export const Navbar = () => {
             className="fixed inset-0 bg-[#FDFBF7] z-40 lg:hidden overflow-y-auto pt-28"
           >
             <div className="px-6 pb-12 flex flex-col space-y-6">
-              <Link to="/about" className="text-3xl font-bold tracking-tight text-brand-950 hover:text-accent-500 transition-colors">
-                About
-              </Link>
-              
-              <div className="space-y-4">
-                <button 
-                  onClick={() => setServicesOpen(!servicesOpen)}
-                  className="flex items-center justify-between w-full text-3xl font-bold tracking-tight text-brand-950"
-                >
-                  Services
-                  <ChevronDown className={cn("h-8 w-8 transition-transform duration-300", servicesOpen && "rotate-180")} />
-                </button>
-                <AnimatePresence>
-                  {servicesOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="pl-6 flex flex-col space-y-4 overflow-hidden"
-                    >
-                      {servicesLinks.map(link => (
-                        <Link key={link.name} to={link.path} className="text-xl font-medium text-brand-700 hover:text-accent-500">
-                          {link.name}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              {activeNavItems.map((item) => {
+                const hasChildren = item.children && item.children.length > 0;
+                const isDropdownOpen = openDropdownId === item.id;
 
-              <Link to="/projects" className="text-3xl font-bold tracking-tight text-brand-950 hover:text-accent-500 transition-colors">
-                Projects
-              </Link>
-              <Link to="/equipment" className="text-3xl font-bold tracking-tight text-brand-950 hover:text-accent-500 transition-colors">
-                Equipment
-              </Link>
-              <Link to="/gallery" className="text-3xl font-bold tracking-tight text-brand-950 hover:text-accent-500 transition-colors">
-                Gallery
-              </Link>
+                if (!hasChildren) {
+                  return (
+                    <Link 
+                      key={item.id} 
+                      to={item.href} 
+                      className="text-3xl font-bold tracking-tight text-brand-950 hover:text-accent-500 transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                }
+
+                return (
+                  <div key={item.id} className="space-y-4">
+                    <button 
+                      onClick={() => setOpenDropdownId(isDropdownOpen ? null : item.id)}
+                      className="flex items-center justify-between w-full text-3xl font-bold tracking-tight text-brand-950"
+                    >
+                      {item.label}
+                      <ChevronDown className={cn("h-8 w-8 transition-transform duration-300", isDropdownOpen && "rotate-180")} />
+                    </button>
+                    <AnimatePresence>
+                      {isDropdownOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="pl-6 flex flex-col space-y-4 overflow-hidden"
+                        >
+                          {item.children?.filter(c => c.isActive !== false).map(child => (
+                            <Link key={child.id || child.href} to={child.href} className="text-xl font-medium text-brand-700 hover:text-accent-500">
+                              {child.label}
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
 
               <div className="pt-10 mt-6 border-t border-brand-950/10 flex flex-col gap-4">
-                <Link to="/contact">
+                <Link to={ctaLink}>
                   <button className="w-full text-lg py-5 rounded-[16px] font-bold tracking-wider uppercase bg-brand-950 text-white shadow-xl shadow-brand-950/20 active:scale-95 transition-all">
-                    Get a Quote
+                    {ctaLabel}
                   </button>
                 </Link>
-                <a href="tel:+15551234567" className="flex items-center justify-center gap-2 text-brand-700 py-4 font-medium hover:text-brand-950 transition-colors">
-                  <Phone className="h-5 w-5" /> Call Us Today
-                </a>
               </div>
             </div>
           </motion.div>
