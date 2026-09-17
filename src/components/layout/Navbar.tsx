@@ -21,7 +21,7 @@ const NavLink = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        "relative px-5 py-2 text-[14px] font-medium tracking-[0.05em] transition-all duration-500 inline-block uppercase",
+        "relative px-3.5 xl:px-5 py-2 text-[13px] xl:text-[14px] font-medium tracking-[0.05em] transition-all duration-500 inline-block uppercase whitespace-nowrap",
         isActive ? "text-brand-950" : "text-brand-600 hover:text-brand-950"
       )}
     >
@@ -105,15 +105,15 @@ export const Navbar = () => {
     >
       <nav 
         className={cn(
-          "pointer-events-auto flex items-center justify-between transition-all duration-700 ease-[0.16,1,0.3,1] mx-auto overflow-visible",
+          "pointer-events-auto flex items-center justify-between gap-4 xl:gap-8 transition-all duration-700 ease-[0.16,1,0.3,1] mx-auto overflow-visible",
           isScrolled 
-            ? "w-[95%] md:w-[90%] max-w-4xl bg-[#FDFBF7]/90 backdrop-blur-xl shadow-[0_12px_40px_rgb(0,0,0,0.08)] border border-brand-950/10 rounded-[16px] md:rounded-[20px] px-4 md:px-6 py-2 md:py-2.5" 
-            : "w-full md:w-[95%] max-w-7xl bg-transparent border-transparent rounded-none md:rounded-[16px] px-4 md:px-8 py-2 md:py-3.5"
+            ? "w-[96%] md:w-[95%] xl:w-[94%] max-w-7xl bg-[#FDFBF7]/95 backdrop-blur-xl shadow-[0_12px_40px_rgb(0,0,0,0.08)] border border-brand-950/10 rounded-[16px] md:rounded-[20px] px-4 sm:px-6 md:px-8 py-2 md:py-2.5" 
+            : "w-full md:w-[96%] max-w-7xl bg-transparent border-transparent rounded-none md:rounded-[16px] px-4 sm:px-6 md:px-8 py-2 md:py-3.5"
         )}
       >
         
         {/* Logo Lockup - Architectural Editorial Style */}
-        <Link to="/" className="flex items-center group relative flex-1 shrink-0">
+        <Link to="/" className="flex items-center group relative shrink-0 z-20">
           {!logoError ? (
             <div className="flex items-center gap-3 md:gap-4">
               <img 
@@ -148,7 +148,7 @@ export const Navbar = () => {
         </Link>
 
         {/* Center: Desktop Navigation */}
-        <div className="hidden lg:flex items-center justify-center shrink-0">
+        <div className="hidden lg:flex items-center justify-center shrink-0 gap-0.5 xl:gap-1.5">
           <NavLink to="/about" isActive={isActive('/about')}>About</NavLink>
 
           {/* Services Dropdown */}
@@ -158,7 +158,7 @@ export const Navbar = () => {
             onMouseLeave={() => setServicesOpen(false)}
           >
             <button className={cn(
-              "relative flex items-center gap-1.5 px-5 py-2 text-[14px] font-medium tracking-[0.05em] uppercase transition-all duration-500 group",
+              "relative flex items-center gap-1.5 px-3.5 xl:px-5 py-2 text-[13px] xl:text-[14px] font-medium tracking-[0.05em] uppercase transition-all duration-500 group whitespace-nowrap",
               isActive('/services') || servicesOpen ? "text-brand-950" : "text-brand-600 hover:text-brand-950"
             )}>
               <motion.span 
@@ -213,13 +213,13 @@ export const Navbar = () => {
         </div>
 
         {/* Right: CTA Area */}
-        <div className="hidden lg:flex items-center justify-end gap-6 flex-1 shrink-0">
+        <div className="hidden lg:flex items-center justify-end shrink-0 z-20">
           <Link to="/contact">
             <button className={cn(
-              "group relative overflow-hidden bg-brand-950 text-[#FDFBF7] font-semibold text-[13px] tracking-widest uppercase transition-all duration-500 hover:shadow-[0_8px_20px_rgb(3,7,18,0.15)]",
-              isScrolled ? "rounded-[12px] px-6 py-2.5" : "rounded-[14px] px-8 py-3"
+              "group relative overflow-hidden bg-brand-950 text-[#FDFBF7] font-semibold text-[12px] xl:text-[13px] tracking-widest uppercase transition-all duration-500 hover:shadow-[0_8px_20px_rgb(3,7,18,0.15)]",
+              isScrolled ? "rounded-[12px] px-5 xl:px-7 py-2.5" : "rounded-[14px] px-6 xl:px-8 py-3"
             )}>
-              <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white">
+              <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white whitespace-nowrap">
                 Get a Quote
               </span>
               <div className="absolute inset-0 z-0 h-full w-full bg-accent-500 translate-y-[101%] transition-transform duration-500 ease-[0.16,1,0.3,1] group-hover:translate-y-0" />
