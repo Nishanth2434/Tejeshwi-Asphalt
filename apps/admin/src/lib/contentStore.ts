@@ -130,6 +130,40 @@ export const updateContent = (key: string, value: any): boolean => {
   return true;
 };
 
+export const batchUpdateContent = async (updates: Record<string, any>): Promise<boolean> => {
+  const map = loadContentFromStorage();
+  const rowsToUpsert = [];
+
+  for (const [key, value] of Object.entries(updates)) {
+    let item = map.get(key);
+    if (!item) {
+      item = { key, page: 'home', section: 'custom', type: 'shortText', label: key, value } as SiteContent;
+    } else {
+      item = { ...item, value } as SiteContent;
+    }
+    map.set(key, item);
+    rowsToUpsert.push({
+      key: item.key,
+      page: item.page,
+      section: item.section,
+      type: item.type,
+      label: item.label,
+      value: item.value
+    });
+  }
+
+  window.dispatchEvent(new CustomEvent(EVENT_CONTENT_UPDATED, { detail: { key: '*' } }));
+
+  if (rowsToUpsert.length > 0) {
+    const { error } = await supabase.from('site_content').upsert(rowsToUpsert, { onConflict: 'key' });
+    if (error) {
+      console.error('Failed to batch save content to Supabase:', error);
+      return false;
+    }
+  }
+  return true;
+};
+
 export const resetContentKey = (key: string): boolean => {
   const initial = initialSiteContent.find((item) => item.key === key);
   if (!initial) return false;

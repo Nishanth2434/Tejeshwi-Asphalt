@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { 
   getAllContent, 
   updateContent, 
+  batchUpdateContent,
   resetContentKey,
   EVENT_CONTENT_UPDATED 
 } from '../../lib/contentStore';
@@ -115,7 +116,7 @@ export const WebsiteContentPage: React.FC = () => {
     }));
   };
 
-  // Save single item
+  // Save single item (kept for internal use if needed, but we will remove the buttons)
   const handleSaveItem = (key: string, label: string) => {
     const valueToSave = formValues[key];
     const ok = updateContent(key, valueToSave);
@@ -123,6 +124,24 @@ export const WebsiteContentPage: React.FC = () => {
       setSavedKey(key);
       setTimeout(() => setSavedKey(null), 2000);
       triggerToast(`Saved "${label}" successfully!`);
+    }
+  };
+
+  const [isSavingAll, setIsSavingAll] = useState(false);
+
+  const handleSaveAll = async () => {
+    setIsSavingAll(true);
+    try {
+      const ok = await batchUpdateContent(formValues);
+      if (ok) {
+        triggerToast("All changes saved successfully!");
+      } else {
+        triggerToast("Failed to save changes.");
+      }
+    } catch (err) {
+      triggerToast("Error saving changes.");
+    } finally {
+      setIsSavingAll(false);
     }
   };
 
@@ -200,16 +219,27 @@ export const WebsiteContentPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Quick Search */}
-        <div className="relative w-full md:w-72">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search all content fields..."
-            className="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
-          />
+        {/* Quick Search and Save */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+          <div className="relative w-full md:w-72">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search all content fields..."
+              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+            />
+          </div>
+          
+          <button
+            onClick={handleSaveAll}
+            disabled={isSavingAll}
+            className="w-full sm:w-auto px-6 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+          >
+            {isSavingAll ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save className="w-4 h-4" />}
+            {isSavingAll ? 'Saving...' : 'Save All Changes'}
+          </button>
         </div>
       </div>
 
@@ -284,28 +314,6 @@ export const WebsiteContentPage: React.FC = () => {
                             title="Reset to factory default"
                           >
                             <RotateCcw className="w-3.5 h-3.5" />
-                          </button>
-                          
-                          <button
-                            type="button"
-                            onClick={() => handleSaveItem(item.key, item.label)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all ${
-                              isSaved
-                                ? 'bg-emerald-600 text-white'
-                                : 'bg-brand-600 hover:bg-brand-700 text-white'
-                            }`}
-                          >
-                            {isSaved ? (
-                              <>
-                                <Check className="w-3.5 h-3.5" />
-                                Saved!
-                              </>
-                            ) : (
-                              <>
-                                <Save className="w-3.5 h-3.5" />
-                                Save
-                              </>
-                            )}
                           </button>
                         </div>
                       </div>
