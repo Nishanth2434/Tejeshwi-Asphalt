@@ -17,6 +17,7 @@ export const Footer = () => {
   const quickLinksTitle = useSiteContent('footer.quickLinksTitle', 'Quick Links');
   const contactTitle = useSiteContent('footer.contactTitle', 'Contact Us');
   const phone = useSiteContent('footer.phone', '+1 (555) 123-4567');
+  const phone2 = useSiteContent('footer.phone2', '');
   const email = useSiteContent('footer.email', 'contact@apexinfra.com');
   const address = useSiteContent('footer.address', '123 Industrial Parkway, Suite 100, Metropolis, NY 10001');
   const copyrightTemplate = useSiteContent(
@@ -153,6 +154,7 @@ export const Footer = () => {
                 <div>
                   <strong className="block text-brand-950 font-bold mb-0.5">Phone</strong>
                   {phone}
+                  {phone2 && <><br />{phone2}</>}
                 </div>
               </li>
               <li className="flex items-center gap-4 text-brand-700 font-medium">

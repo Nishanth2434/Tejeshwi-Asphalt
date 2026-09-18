@@ -1132,6 +1132,14 @@ export const initialSiteContent: SiteContent[] = [
     value: '+91 (800) 123-4567'
   },
   {
+    key: 'footer.phone2',
+    page: 'footer',
+    section: 'Contact Details',
+    type: 'shortText',
+    label: 'Alternate Phone Number',
+    value: ''
+  },
+  {
     key: 'footer.email',
     page: 'footer',
     section: 'Contact Details',
