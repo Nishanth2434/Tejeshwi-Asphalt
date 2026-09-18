@@ -24,6 +24,12 @@ const syncFromSupabase = async () => {
     
     if (data && data.length > 0) {
       data.forEach((row) => {
+        if (row.key === '__navigation_items__') {
+          navItemsCache = row.value;
+          window.dispatchEvent(new CustomEvent(EVENT_NAV_UPDATED, { detail: { items: navItemsCache } }));
+          return;
+        }
+
         if (contentMapCache!.has(row.key)) {
           const defaultItem = contentMapCache!.get(row.key)!;
           // Apply schema migrations or overrides if needed
@@ -61,25 +67,7 @@ export const loadContentFromStorage = (): Map<string, SiteContent> => {
   return map;
 };
 
-export const loadNavItemsFromStorage = (): NavItem[] => {
-  if (navItemsCache) return navItemsCache;
 
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY_NAV);
-    if (raw) {
-      const parsed: NavItem[] = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        navItemsCache = parsed;
-        return parsed;
-      }
-    }
-  } catch (err) {
-    console.warn('Failed to parse nav items from localStorage:', err);
-  }
-
-  navItemsCache = JSON.parse(JSON.stringify(initialNavItems));
-  return navItemsCache!;
-};
 
 export const getContent = <T = any>(key: string, defaultValue?: T): T => {
   const map = loadContentFromStorage();
@@ -163,26 +151,37 @@ export const resetAllContent = (): boolean => {
 
 // Navigation operations
 export const getNavItems = (): NavItem[] => {
-  return loadNavItemsFromStorage();
+  if (navItemsCache) return navItemsCache;
+  return initialNavItems;
 };
 
 export const updateNavItems = (items: NavItem[]): boolean => {
   try {
-    localStorage.setItem(STORAGE_KEY_NAV, JSON.stringify(items));
     navItemsCache = items;
     window.dispatchEvent(new CustomEvent(EVENT_NAV_UPDATED, { detail: { items } }));
+    
+    // Background persist to Supabase
+    supabase.from('site_content').upsert({
+      key: '__navigation_items__',
+      page: 'nav',
+      section: 'nav',
+      type: 'repeatableBlock',
+      label: 'Navigation',
+      value: items
+    }, { onConflict: 'key' }).then(({ error }) => {
+      if (error) console.error('Failed to save nav to Supabase:', error);
+    });
+    
     return true;
   } catch (err) {
-    console.error('Failed to save nav items to localStorage:', err);
+    console.error('Failed to save nav items:', err);
     return false;
   }
 };
 
 export const resetNavItems = (): boolean => {
   try {
-    localStorage.removeItem(STORAGE_KEY_NAV);
     navItemsCache = null;
-    loadNavItemsFromStorage();
     window.dispatchEvent(new CustomEvent(EVENT_NAV_UPDATED, { detail: { items: initialNavItems } }));
     return true;
   } catch (err) {
