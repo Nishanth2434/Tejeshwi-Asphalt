@@ -706,9 +706,9 @@ export const initialSiteContent: SiteContent[] = [
     type: 'repeatableBlock',
     label: 'Leadership Profiles',
     value: [
-      { name: 'Arjun Sharma', role: 'Chief Executive Officer', initials: 'AS' },
-      { name: 'Priya Patel', role: 'Director of Engineering', initials: 'PP' },
-      { name: 'Vikram Singh', role: 'Head of Operations', initials: 'VS' }
+      { name: 'Arjun Sharma', role: 'Chief Executive Officer', initials: 'AS', photo: '' },
+      { name: 'Priya Patel', role: 'Director of Engineering', initials: 'PP', photo: '' },
+      { name: 'Vikram Singh', role: 'Head of Operations', initials: 'VS', photo: '' }
     ]
   },
   {

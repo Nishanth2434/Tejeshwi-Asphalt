@@ -266,10 +266,14 @@ export const About = () => {
           <div className="grid md:grid-cols-3 gap-12">
             {(leadershipMembers || []).map((leader: any, i: number) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="text-center group">
-                <div className="w-64 h-64 mx-auto bg-brand-50 rounded-full mb-8 flex items-center justify-center border-4 border-brand-100 group-hover:border-brand-500 transition-colors duration-300">
-                  <span className="text-6xl font-black text-brand-200 group-hover:text-brand-500 transition-colors">
-                    {leader.initials || leader.name.split(' ').map((n: string) => n[0]).join('')}
-                  </span>
+                <div className="w-64 h-64 mx-auto bg-brand-50 rounded-full mb-8 flex items-center justify-center border-4 border-brand-100 group-hover:border-brand-500 transition-colors duration-300 overflow-hidden">
+                  {leader.photo ? (
+                    <img src={leader.photo} alt={leader.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-6xl font-black text-brand-200 group-hover:text-brand-500 transition-colors">
+                      {leader.initials || leader.name.split(' ').map((n: string) => n[0]).join('')}
+                    </span>
+                  )}
                 </div>
                 <h3 className="text-2xl font-bold text-brand-950 mb-1">{leader.name}</h3>
                 <p className="text-brand-600 font-medium">{leader.role}</p>
