@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Phone, ArrowRight } from 'lucide-react';
+import { Menu, X, ChevronDown, Phone, ArrowRight, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../utils/cn';
 import { useSiteContent, useNavItems } from '../../lib/getContent';
@@ -72,6 +72,23 @@ export const Navbar = () => {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const location = useLocation();
   const [logoError, setLogoError] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (document.documentElement.classList.contains('dark')) {
+      setIsDarkMode(true);
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    if (isDarkMode) {
+      document.documentElement.classList.remove('dark');
+      setIsDarkMode(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      setIsDarkMode(true);
+    }
+  };
 
   // Dynamic Site Content & Nav Items
   const brandName = useSiteContent('nav.brand.name', 'TEJASHWI');
@@ -249,7 +266,16 @@ export const Navbar = () => {
         </div>
 
         {/* Right: CTA Area on Desktop & Mobile Menu Toggle on Mobile */}
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end gap-2 md:gap-4">
+          
+          {/* Dark Mode Toggle */}
+          <button 
+            onClick={toggleDarkMode}
+            className="p-2 md:p-2.5 rounded-xl bg-brand-950/5 text-brand-950 hover:bg-brand-950/10 transition-colors hidden sm:block dark:text-white dark:bg-white/10 dark:hover:bg-white/20"
+            aria-label="Toggle Dark Mode"
+          >
+            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
           <Link to={ctaLink} className="hidden lg:block">
             <button className={cn(
               "group relative overflow-hidden font-semibold text-[12px] xl:text-[13px] tracking-widest uppercase transition-all duration-500 hover:shadow-[0_8px_20px_rgb(3,7,18,0.15)]",
