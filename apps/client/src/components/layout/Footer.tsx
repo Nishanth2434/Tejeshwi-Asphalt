@@ -179,9 +179,7 @@ export const Footer = () => {
             <Link to="/privacy-policy" className="hover:text-brand-900 transition-colors">Privacy Policy</Link>
             <Link to="/terms-of-service" className="hover:text-brand-900 transition-colors">Terms of Service</Link>
             <Link to="/sitemap" className="hover:text-brand-900 transition-colors">Sitemap</Link>
-            <Link to="/admin/website" className="hover:text-brand-900 transition-colors inline-flex items-center gap-1.5 text-brand-500 hover:text-brand-700 font-semibold bg-brand-100/70 hover:bg-brand-100 px-3 py-1 rounded-full">
-              <ShieldCheck className="w-3.5 h-3.5" /> CMS Admin
-            </Link>
+
           </div>
         </div>
       </div>
