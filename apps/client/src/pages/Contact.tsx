@@ -135,22 +135,6 @@ export const Contact = () => {
                 </div>
               </div>
 
-              {/* Visual Map Placeholder */}
-              <div className="bg-brand-50 p-4 rounded-3xl border border-brand-100 overflow-hidden relative h-[300px] flex items-center justify-center group">
-                {/* Simulated map grid */}
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgwLDM5LDk0LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-50" />
-                
-                {/* Radar/Pin animation */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-16 h-16 bg-brand-500 rounded-full flex items-center justify-center text-white shadow-xl relative animate-bounce">
-                    <MapPin className="w-8 h-8" />
-                    <div className="absolute inset-0 bg-brand-500 rounded-full animate-ping opacity-75" />
-                  </div>
-                  <div className="mt-4 bg-white/90 backdrop-blur px-4 py-2 rounded-lg font-bold text-brand-950 shadow-sm border border-brand-100 text-sm">
-                    {mapBadge}
-                  </div>
-                </div>
-              </div>
 
             </motion.div>
 
