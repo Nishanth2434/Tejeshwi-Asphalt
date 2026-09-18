@@ -6,7 +6,7 @@ const STORAGE_KEY_NAV = 'gsp_site_nav_v1';
 const EVENT_CONTENT_UPDATED = 'gsp:content_updated';
 const EVENT_NAV_UPDATED = 'gsp:nav_updated';
 
-// In-memory cache
+// In-memory cache for SiteContent
 let contentMapCache: Map<string, SiteContent> | null = null;
 let navItemsCache: NavItem[] | null = null;
 

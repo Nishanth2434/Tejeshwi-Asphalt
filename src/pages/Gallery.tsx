@@ -15,11 +15,12 @@ export const Gallery = () => {
   const heroHeadline = useSiteContent('gallery.hero.headline', 'Visual Gallery');
   const heroDesc = useSiteContent('gallery.hero.description', 'A showcase of our engineering precision, heavy machinery, and dedicated teams in action.');
   const categories = useSiteContent<string[]>('gallery.categories', defaultCategories);
+  const galleryImages = useSiteContent<any[]>('gallery.images', mockGallery);
 
   const [filter, setFilter] = useState('All');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const filteredImages = mockGallery.filter(img => 
+  const filteredImages = galleryImages.filter(img => 
     filter === 'All' ? true : img.category === filter
   );
 
@@ -79,7 +80,7 @@ export const Gallery = () => {
           <AnimatePresence>
             {filteredImages.map((item, index) => (
               <motion.div
-                key={item.id}
+                key={item.id || index}
                 layout
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}

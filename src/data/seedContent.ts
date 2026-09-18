@@ -932,6 +932,25 @@ export const initialSiteContent: SiteContent[] = [
     label: 'Gallery Category Filters',
     value: ['All', 'Road Construction', 'Asphalt Work', 'Machinery', 'Team', 'Completed Projects', 'Before & After']
   },
+  {
+    key: 'gallery.images',
+    page: 'gallery',
+    section: 'Gallery Images',
+    type: 'repeatableBlock',
+    label: 'Gallery Images List',
+    value: [
+      { image: projectHighway, category: 'Completed Projects' },
+      { image: eqPaver, category: 'Machinery' },
+      { image: aboutImg, category: 'Team' },
+      { image: servicePaving, category: 'Asphalt Work' },
+      { image: eqRoller, category: 'Machinery' },
+      { image: projectDowntown, category: 'Completed Projects' },
+      { image: serviceConst, category: 'Road Construction' },
+      { image: serviceInfra, category: 'Road Construction' },
+      { image: projectHighway, category: 'Before & After' },
+      { image: eqPaver, category: 'Asphalt Work' },
+    ]
+  },
 
   // --- CONTACT PAGE ---
   {
