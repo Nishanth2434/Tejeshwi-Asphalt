@@ -101,7 +101,7 @@ export const AdminLayout: React.FC = () => {
               </NavLink>
 
               <NavLink
-                to="/admin/website/navigation"
+                to="/website/navigation"
                 className={({ isActive }) =>
                   `px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2 whitespace-nowrap transition-colors ${
                     isActive
