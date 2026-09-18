@@ -118,7 +118,7 @@ export const Navbar = () => {
     <motion.header
       className="fixed top-0 inset-x-0 z-50 flex justify-center pointer-events-none transition-all duration-700 ease-[0.16,1,0.3,1]"
       initial={{ paddingTop: 0 }}
-      animate={{ paddingTop: isScrolled ? 16 : 24 }}
+      animate={{ paddingTop: isScrolled ? 8 : 12 }}
     >
       <nav 
         className={cn(
