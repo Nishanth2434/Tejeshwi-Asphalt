@@ -250,19 +250,18 @@ export const Navbar = () => {
 
         {/* Right: CTA Area on Desktop & Mobile Menu Toggle on Mobile */}
         <div className="flex items-center justify-end">
-          {location.pathname !== ctaLink && (
-            <Link to={ctaLink} className="hidden lg:block">
-              <button className={cn(
-                "group relative overflow-hidden bg-brand-950 text-[#FDFBF7] font-semibold text-[12px] xl:text-[13px] tracking-widest uppercase transition-all duration-500 hover:shadow-[0_8px_20px_rgb(3,7,18,0.15)]",
-                isScrolled ? "rounded-[12px] px-5 xl:px-7 py-2.5" : "rounded-[14px] px-6 xl:px-8 py-3"
-              )}>
-                <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white whitespace-nowrap">
-                  {ctaLabel}
-                </span>
-                <div className="absolute inset-0 z-0 h-full w-full bg-accent-500 translate-y-[101%] transition-transform duration-500 ease-[0.16,1,0.3,1] group-hover:translate-y-0" />
-              </button>
-            </Link>
-          )}
+          <Link to={ctaLink} className="hidden lg:block">
+            <button className={cn(
+              "group relative overflow-hidden font-semibold text-[12px] xl:text-[13px] tracking-widest uppercase transition-all duration-500 hover:shadow-[0_8px_20px_rgb(3,7,18,0.15)]",
+              isScrolled ? "rounded-[12px] px-5 xl:px-7 py-2.5" : "rounded-[14px] px-6 xl:px-8 py-3",
+              location.pathname === ctaLink ? "bg-accent-500 text-white" : "bg-brand-950 text-[#FDFBF7]"
+            )}>
+              <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-white whitespace-nowrap">
+                {ctaLabel}
+              </span>
+              <div className="absolute inset-0 z-0 h-full w-full bg-accent-500 translate-y-[101%] transition-transform duration-500 ease-[0.16,1,0.3,1] group-hover:translate-y-0" />
+            </button>
+          </Link>
 
           {/* Mobile Menu Toggle */}
           <div className="flex items-center lg:hidden z-50">
@@ -332,15 +331,16 @@ export const Navbar = () => {
                 );
               })}
 
-              {location.pathname !== ctaLink && (
-                <div className="pt-10 mt-6 border-t border-brand-950/10 flex flex-col gap-4">
-                  <Link to={ctaLink}>
-                    <button className="w-full text-lg py-5 rounded-[16px] font-bold tracking-wider uppercase bg-brand-950 text-white shadow-xl shadow-brand-950/20 active:scale-95 transition-all">
-                      {ctaLabel}
-                    </button>
-                  </Link>
-                </div>
-              )}
+              <div className="pt-10 mt-6 border-t border-brand-950/10 flex flex-col gap-4">
+                <Link to={ctaLink}>
+                  <button className={cn(
+                    "w-full text-lg py-5 rounded-[16px] font-bold tracking-wider uppercase shadow-xl shadow-brand-950/20 active:scale-95 transition-all text-white",
+                    location.pathname === ctaLink ? "bg-accent-500" : "bg-brand-950"
+                  )}>
+                    {ctaLabel}
+                  </button>
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}
