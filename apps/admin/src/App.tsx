@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { WebsiteContentPage } from './pages/admin/WebsiteContentPage';
 import { NavigationPage } from './pages/admin/NavigationPage';
+import { Inbox } from './pages/Inbox';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route index element={<Navigate to="/website" replace />} />
           <Route path="website" element={<WebsiteContentPage />} />
           <Route path="website/navigation" element={<NavigationPage />} />
+          <Route path="inbox" element={<Inbox />} />
           <Route path="*" element={<Navigate to="/website" replace />} />
         </Route>
       </Routes>

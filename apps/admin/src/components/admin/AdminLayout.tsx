@@ -10,7 +10,8 @@ import {
   ChevronRight,
   ExternalLink,
   Sparkles,
-  AlertTriangle
+  AlertTriangle,
+  Mail
 } from 'lucide-react';
 import { resetAllContent, resetNavItems } from '../../lib/contentStore';
 
@@ -111,6 +112,20 @@ export const AdminLayout: React.FC = () => {
               >
                 <MenuIcon className="w-4 h-4" />
                 Navigation Menu
+              </NavLink>
+
+              <NavLink
+                to="/inbox"
+                className={({ isActive }) =>
+                  `px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2 whitespace-nowrap transition-colors ${
+                    isActive
+                      ? 'bg-white text-brand-600 shadow-sm border border-slate-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }`
+                }
+              >
+                <Mail className="w-4 h-4" />
+                Client Inbox
               </NavLink>
 
               <button
