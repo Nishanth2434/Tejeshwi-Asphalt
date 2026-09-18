@@ -10,39 +10,54 @@ const EVENT_NAV_UPDATED = 'gsp:nav_updated';
 let contentMapCache: Map<string, SiteContent> | null = null;
 let navItemsCache: NavItem[] | null = null;
 
+import { supabase } from './supabaseClient';
+
+let supabaseSyncStarted = false;
+
+const syncFromSupabase = async () => {
+  try {
+    const { data, error } = await supabase.from('site_content').select('*');
+    if (error) {
+      console.warn('Failed to fetch from Supabase:', error.message);
+      return;
+    }
+    
+    if (data && data.length > 0) {
+      data.forEach((row) => {
+        if (contentMapCache!.has(row.key)) {
+          const defaultItem = contentMapCache!.get(row.key)!;
+          // Apply schema migrations or overrides if needed
+          if (defaultItem.type === 'repeatableBlock' && Array.isArray(row.value) && (row.value.length === 0 || typeof row.value[0] === 'string')) {
+            contentMapCache!.set(row.key, { ...defaultItem });
+          } else {
+            contentMapCache!.set(row.key, { ...defaultItem, value: row.value });
+          }
+        } else {
+          contentMapCache!.set(row.key, row as any);
+        }
+      });
+      window.dispatchEvent(new CustomEvent(EVENT_CONTENT_UPDATED, { detail: { key: '*' } }));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const loadContentFromStorage = (): Map<string, SiteContent> => {
   if (contentMapCache) return contentMapCache;
 
   const map = new Map<string, SiteContent>();
-  // 1. Seed defaults first
   initialSiteContent.forEach((item) => {
     map.set(item.key, { ...item });
   });
 
-  // 2. Overlay with stored overrides
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY_CONTENT);
-    if (raw) {
-      const parsed: SiteContent[] = JSON.parse(raw);
-      parsed.forEach((item) => {
-        if (map.has(item.key)) {
-          const defaultItem = map.get(item.key)!;
-          // If default schema changed to repeatableBlock of objects but localStorage has old strings, upgrade to defaults
-          if (defaultItem.type === 'repeatableBlock' && Array.isArray(item.value) && (item.value.length === 0 || typeof item.value[0] === 'string')) {
-            map.set(item.key, { ...defaultItem });
-          } else {
-            map.set(item.key, { ...defaultItem, ...item, value: item.value });
-          }
-        } else {
-          map.set(item.key, item);
-        }
-      });
-    }
-  } catch (err) {
-    console.warn('Failed to parse site content from localStorage:', err);
+  contentMapCache = map;
+
+  if (!supabaseSyncStarted) {
+    supabaseSyncStarted = true;
+    syncFromSupabase();
   }
 
-  contentMapCache = map;
   return map;
 };
 
@@ -97,32 +112,34 @@ export const getAllContent = (): SiteContent[] => {
 
 export const updateContent = (key: string, value: any): boolean => {
   const map = loadContentFromStorage();
-  let item = map.get(key);
+  let item = map.get(key) as SiteContent | undefined;
+  
   if (!item) {
-    console.warn(`Content key "${key}" not found in seed registry.`);
-    return false;
+    item = { key, page: 'home', section: 'custom', type: 'shortText', label: key, value } as SiteContent;
+  } else {
+    item = { ...item, value } as SiteContent;
   }
+  
+  map.set(key, item);
+  
+  // Optimistic UI update
+  window.dispatchEvent(new CustomEvent(EVENT_CONTENT_UPDATED, { detail: { key, value } }));
 
-  const updated: SiteContent = {
-    ...item,
-    value,
-    updatedAt: new Date().toISOString(),
-    updatedBy: 'Admin'
-  };
+  // Background persist to Supabase
+  supabase.from('site_content').upsert({
+    key: item.key,
+    page: item.page,
+    section: item.section,
+    type: item.type,
+    label: item.label,
+    value: item.value
+  }, { onConflict: 'key' }).then(({ error }) => {
+    if (error) {
+      console.error('Failed to save content to Supabase:', error);
+    }
+  });
 
-  map.set(key, updated);
-  contentMapCache = map;
-
-  // Persist array to localStorage
-  try {
-    const arrayToPersist = Array.from(map.values());
-    localStorage.setItem(STORAGE_KEY_CONTENT, JSON.stringify(arrayToPersist));
-    window.dispatchEvent(new CustomEvent(EVENT_CONTENT_UPDATED, { detail: { key, value } }));
-    return true;
-  } catch (err) {
-    console.error('Failed to save content to localStorage:', err);
-    return false;
-  }
+  return true;
 };
 
 export const resetContentKey = (key: string): boolean => {
