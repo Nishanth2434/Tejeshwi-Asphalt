@@ -12,7 +12,8 @@ import {
   Sparkles,
   AlertTriangle,
   Mail,
-  LogOut
+  LogOut,
+  Settings
 } from 'lucide-react';
 import { resetAllContent, resetNavItems } from '../../lib/contentStore';
 import { supabase } from '../../lib/supabaseClient';
@@ -20,6 +21,11 @@ import { supabase } from '../../lib/supabaseClient';
 export const AdminLayout: React.FC = () => {
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
+
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [passwordStatus, setPasswordStatus] = useState<{type: 'error' | 'success', msg: string} | null>(null);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   const handleFullReset = () => {
     resetAllContent();
@@ -142,12 +148,19 @@ export const AdminLayout: React.FC = () => {
           </div>
           
           {/* Bottom user section */}
-          <div className="p-4 border-t border-slate-200">
+          <div className="p-4 border-t border-slate-200 flex flex-col gap-2">
+            <button
+              onClick={() => setShowPasswordModal(true)}
+              className="w-full px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center gap-2 transition-colors"
+            >
+              <Settings className="w-4 h-4" />
+              Change Password
+            </button>
             <button
               onClick={async () => {
                 await supabase.auth.signOut();
               }}
-              className="w-full px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center gap-2 transition-colors"
+              className="w-full px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               Sign Out
@@ -196,6 +209,83 @@ export const AdminLayout: React.FC = () => {
                 className="px-4 py-2 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm transition-colors"
               >
                 Confirm Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PASSWORD CHANGE MODAL */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center mb-5">
+              <Settings className="w-6 h-6 text-brand-600" />
+            </div>
+            
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Change Password</h3>
+            <p className="text-sm text-slate-500 mb-6">
+              Enter a new password for your admin account.
+            </p>
+
+            {passwordStatus && (
+              <div className={`p-3 rounded-xl text-sm font-medium mb-4 border ${
+                passwordStatus.type === 'error' 
+                  ? 'bg-rose-50 text-rose-600 border-rose-100' 
+                  : 'bg-emerald-50 text-emerald-600 border-emerald-100'
+              }`}>
+                {passwordStatus.msg}
+              </div>
+            )}
+
+            <div className="space-y-4 mb-8">
+              <div>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="New password"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPasswordModal(false);
+                  setNewPassword('');
+                  setPasswordStatus(null);
+                }}
+                className="flex-1 px-4 py-2.5 rounded-xl font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isChangingPassword || !newPassword}
+                onClick={async () => {
+                  setIsChangingPassword(true);
+                  setPasswordStatus(null);
+                  try {
+                    const { error } = await supabase.auth.updateUser({ password: newPassword });
+                    if (error) throw error;
+                    setPasswordStatus({ type: 'success', msg: 'Password updated successfully!' });
+                    setTimeout(() => {
+                      setShowPasswordModal(false);
+                      setNewPassword('');
+                      setPasswordStatus(null);
+                    }, 1500);
+                  } catch (err: any) {
+                    setPasswordStatus({ type: 'error', msg: err.message || 'Failed to update password' });
+                  } finally {
+                    setIsChangingPassword(false);
+                  }
+                }}
+                className="flex-1 px-4 py-2.5 rounded-xl font-bold text-white bg-brand-600 hover:bg-brand-700 transition-colors disabled:opacity-50"
+              >
+                {isChangingPassword ? 'Saving...' : 'Save'}
               </button>
             </div>
           </div>
