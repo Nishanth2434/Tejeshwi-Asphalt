@@ -11,9 +11,11 @@ import {
   ExternalLink,
   Sparkles,
   AlertTriangle,
-  Mail
+  Mail,
+  LogOut
 } from 'lucide-react';
 import { resetAllContent, resetNavItems } from '../../lib/contentStore';
+import { supabase } from '../../lib/supabaseClient';
 
 export const AdminLayout: React.FC = () => {
   const [showResetModal, setShowResetModal] = useState(false);
@@ -137,6 +139,19 @@ export const AdminLayout: React.FC = () => {
                 Reset Defaults
               </button>
             </nav>
+          </div>
+          
+          {/* Bottom user section */}
+          <div className="p-4 border-t border-slate-200">
+            <button
+              onClick={async () => {
+                await supabase.auth.signOut();
+              }}
+              className="w-full px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center gap-2 transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </button>
           </div>
         </div>
       </header>
