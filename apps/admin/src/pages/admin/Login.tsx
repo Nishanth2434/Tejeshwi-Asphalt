@@ -120,6 +120,39 @@ export const Login: React.FC = () => {
             </button>
           </form>
 
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-200" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-slate-500">Or continue with</span>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={async () => {
+                  setIsLoading(true);
+                  setError(null);
+                  try {
+                    const { error } = await supabase.auth.signInWithPasskey();
+                    if (error) throw error;
+                  } catch (err: any) {
+                    setError(err.message || 'Passkey login failed or not configured');
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+                className="w-full flex justify-center items-center py-2.5 px-4 border border-slate-300 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors"
+              >
+                <Lock className="w-4 h-4 mr-2 text-brand-600" />
+                Sign in with Passkey
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
