@@ -34,20 +34,23 @@
 .dark .bg-brand-50, .dark .bg-brand-50\/50, .dark .bg-brand-50\/30 {
   background-color: #1f2937 !important;
 }
-.dark .text-brand-950 {
+.dark .text-brand-950, .dark .text-slate-900, .dark .text-gray-900 {
   color: #f9fafb !important;
 }
-.dark .text-brand-900 {
+.dark .text-brand-900, .dark .text-slate-800, .dark .text-gray-800 {
   color: #f3f4f6 !important;
 }
-.dark .text-brand-800, .dark .text-brand-700 {
+.dark .text-brand-800, .dark .text-brand-700, .dark .text-slate-700, .dark .text-gray-700 {
   color: #e5e7eb !important;
 }
-.dark .text-brand-600, .dark .text-brand-500 {
+.dark .text-brand-600, .dark .text-brand-500, .dark .text-slate-600, .dark .text-slate-500, .dark .text-gray-600, .dark .text-gray-500 {
   color: #9ca3af !important;
 }
-.dark .border-brand-100, .dark .border-brand-200 {
+.dark .border-brand-100, .dark .border-brand-200, .dark .border-slate-200, .dark .border-slate-100, .dark .border-gray-200, .dark .border-gray-100 {
   border-color: #374151 !important;
+}
+.dark .bg-slate-50, .dark .bg-slate-100, .dark .bg-gray-50, .dark .bg-gray-100 {
+  background-color: #1f2937 !important;
 }
 .dark .border-white\/20 {
   border-color: rgba(255,255,255,0.1) !important;
