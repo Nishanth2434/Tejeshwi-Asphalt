@@ -132,6 +132,11 @@ export const updateContent = (key: string, value: any): boolean => {
 
 export const batchUpdateContent = async (updates: Record<string, any>): Promise<boolean> => {
   const map = loadContentFromStorage();
+  
+  // Create a backup of the current state before saving
+  const currentArray = Array.from(map.values());
+  localStorage.setItem(`${STORAGE_KEY_CONTENT}_backup`, JSON.stringify(currentArray));
+  
   const rowsToUpsert = [];
 
   for (const [key, value] of Object.entries(updates)) {
@@ -152,6 +157,9 @@ export const batchUpdateContent = async (updates: Record<string, any>): Promise<
     });
   }
 
+  // Update primary storage
+  localStorage.setItem(STORAGE_KEY_CONTENT, JSON.stringify(Array.from(map.values())));
+
   window.dispatchEvent(new CustomEvent(EVENT_CONTENT_UPDATED, { detail: { key: '*' } }));
 
   if (rowsToUpsert.length > 0) {
@@ -162,6 +170,50 @@ export const batchUpdateContent = async (updates: Record<string, any>): Promise<
     }
   }
   return true;
+};
+
+export const hasUndoAvailable = (): boolean => {
+  return !!localStorage.getItem(`${STORAGE_KEY_CONTENT}_backup`);
+};
+
+export const undoLastSave = async (): Promise<boolean> => {
+  const backup = localStorage.getItem(`${STORAGE_KEY_CONTENT}_backup`);
+  if (!backup) return false;
+
+  try {
+    const backupData: SiteContent[] = JSON.parse(backup);
+    
+    // Save backup back to primary storage
+    localStorage.setItem(STORAGE_KEY_CONTENT, backup);
+    contentMapCache = new Map(backupData.map(item => [item.key, item]));
+    
+    window.dispatchEvent(new CustomEvent(EVENT_CONTENT_UPDATED, { detail: { key: '*' } }));
+
+    // Sync the restored backup to Supabase
+    const rowsToUpsert = backupData.map(item => ({
+      key: item.key,
+      page: item.page,
+      section: item.section,
+      type: item.type,
+      label: item.label,
+      value: item.value
+    }));
+
+    if (rowsToUpsert.length > 0) {
+      const { error } = await supabase.from('site_content').upsert(rowsToUpsert, { onConflict: 'key' });
+      if (error) {
+        console.error('Failed to restore backup to Supabase:', error);
+      }
+    }
+    
+    // Clear backup so we can't undo multiple times
+    localStorage.removeItem(`${STORAGE_KEY_CONTENT}_backup`);
+    
+    return true;
+  } catch (err) {
+    console.error('Failed to undo last save:', err);
+    return false;
+  }
 };
 
 export const resetContentKey = (key: string): boolean => {

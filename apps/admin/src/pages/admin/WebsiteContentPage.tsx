@@ -4,6 +4,8 @@ import {
   updateContent, 
   batchUpdateContent,
   resetContentKey,
+  hasUndoAvailable,
+  undoLastSave,
   EVENT_CONTENT_UPDATED 
 } from '../../lib/contentStore';
 import type { SiteContent } from '../../types/content';
@@ -128,6 +130,11 @@ export const WebsiteContentPage: React.FC = () => {
   };
 
   const [isSavingAll, setIsSavingAll] = useState(false);
+  const [canUndo, setCanUndo] = useState(false);
+
+  useEffect(() => {
+    setCanUndo(hasUndoAvailable());
+  }, []);
 
   const handleSaveAll = async () => {
     setIsSavingAll(true);
@@ -135,6 +142,7 @@ export const WebsiteContentPage: React.FC = () => {
       const ok = await batchUpdateContent(formValues);
       if (ok) {
         triggerToast("All changes saved successfully!");
+        setCanUndo(hasUndoAvailable());
       } else {
         triggerToast("Failed to save changes.");
       }
@@ -142,6 +150,20 @@ export const WebsiteContentPage: React.FC = () => {
       triggerToast("Error saving changes.");
     } finally {
       setIsSavingAll(false);
+    }
+  };
+
+  const handleUndo = async () => {
+    if (!canUndo) return;
+    if (window.confirm("Undo the last save? This will revert the website to exactly how it looked before you clicked Save All.")) {
+      const ok = await undoLastSave();
+      if (ok) {
+        loadData();
+        triggerToast("Reverted to previous settings.");
+        setCanUndo(false);
+      } else {
+        triggerToast("Failed to undo.");
+      }
     }
   };
 
@@ -232,14 +254,27 @@ export const WebsiteContentPage: React.FC = () => {
             />
           </div>
           
-          <button
-            onClick={handleSaveAll}
-            disabled={isSavingAll}
-            className="w-full sm:w-auto px-6 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2 whitespace-nowrap"
-          >
-            {isSavingAll ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save className="w-4 h-4" />}
-            {isSavingAll ? 'Saving...' : 'Save All Changes'}
-          </button>
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            {canUndo && (
+              <button
+                onClick={handleUndo}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+                title="Undo last save"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Undo
+              </button>
+            )}
+            
+            <button
+              onClick={handleSaveAll}
+              disabled={isSavingAll}
+              className="flex-1 sm:flex-none px-6 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold shadow-sm transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+            >
+              {isSavingAll ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save className="w-4 h-4" />}
+              {isSavingAll ? 'Saving...' : 'Save All Changes'}
+            </button>
+          </div>
         </div>
       </div>
 
