@@ -23,6 +23,7 @@ export const AdminLayout: React.FC = () => {
   const [resetSuccess, setResetSuccess] = useState(false);
 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [passwordStatus, setPasswordStatus] = useState<{type: 'error' | 'success', msg: string} | null>(null);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -225,7 +226,7 @@ export const AdminLayout: React.FC = () => {
             
             <h3 className="text-xl font-bold text-slate-900 mb-2">Change Password</h3>
             <p className="text-sm text-slate-500 mb-6">
-              Enter a new password for your admin account.
+              Enter your current password and your new password.
             </p>
 
             {passwordStatus && (
@@ -242,6 +243,15 @@ export const AdminLayout: React.FC = () => {
               <div>
                 <input
                   type="password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  placeholder="Current password"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="New password"
@@ -255,6 +265,7 @@ export const AdminLayout: React.FC = () => {
                 type="button"
                 onClick={() => {
                   setShowPasswordModal(false);
+                  setOldPassword('');
                   setNewPassword('');
                   setPasswordStatus(null);
                 }}
@@ -264,16 +275,33 @@ export const AdminLayout: React.FC = () => {
               </button>
               <button
                 type="button"
-                disabled={isChangingPassword || !newPassword}
+                disabled={isChangingPassword || !newPassword || !oldPassword}
                 onClick={async () => {
                   setIsChangingPassword(true);
                   setPasswordStatus(null);
                   try {
+                    // First, get the current user's email
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (!user || !user.email) throw new Error("No active user found.");
+
+                    // Verify old password by attempting to sign in
+                    const { error: signInError } = await supabase.auth.signInWithPassword({
+                      email: user.email,
+                      password: oldPassword,
+                    });
+
+                    if (signInError) {
+                      throw new Error("Incorrect current password.");
+                    }
+
+                    // If that succeeded, we can safely update to the new password
                     const { error } = await supabase.auth.updateUser({ password: newPassword });
                     if (error) throw error;
+                    
                     setPasswordStatus({ type: 'success', msg: 'Password updated successfully!' });
                     setTimeout(() => {
                       setShowPasswordModal(false);
+                      setOldPassword('');
                       setNewPassword('');
                       setPasswordStatus(null);
                     }, 1500);
