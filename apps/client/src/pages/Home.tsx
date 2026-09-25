@@ -657,12 +657,12 @@ export const Home = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
             {(whyCards || []).map((feature: any, i: number) => {
               const defaultIcons = [
-                <HardHat className="w-10 h-10" />,
-                <Settings className="w-10 h-10" />,
-                <Award className="w-10 h-10" />,
-                <ShieldCheck className="w-10 h-10" />,
-                <Clock className="w-10 h-10" />,
-                <TrendingUp className="w-10 h-10" />
+                <HardHat key="icon-1" className="w-10 h-10" />,
+                <Settings key="icon-2" className="w-10 h-10" />,
+                <Award key="icon-3" className="w-10 h-10" />,
+                <ShieldCheck key="icon-4" className="w-10 h-10" />,
+                <Clock key="icon-5" className="w-10 h-10" />,
+                <TrendingUp key="icon-6" className="w-10 h-10" />
               ];
               return (
                 <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex gap-6">

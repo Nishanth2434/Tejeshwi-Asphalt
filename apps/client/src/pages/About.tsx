@@ -208,12 +208,12 @@ export const About = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
             {(expItems || []).map((item: any, i: number) => {
               const defaultIcons = [
-                <HardHat className="w-8 h-8" />,
-                <Truck className="w-8 h-8" />,
-                <Building2 className="w-8 h-8" />,
-                <TrendingUp className="w-8 h-8" />,
-                <Award className="w-8 h-8" />,
-                <ShieldCheck className="w-8 h-8" />
+                <HardHat key="icon-1" className="w-8 h-8" />,
+                <Truck key="icon-2" className="w-8 h-8" />,
+                <Building2 key="icon-3" className="w-8 h-8" />,
+                <TrendingUp key="icon-4" className="w-8 h-8" />,
+                <Award key="icon-5" className="w-8 h-8" />,
+                <ShieldCheck key="icon-6" className="w-8 h-8" />
               ];
               return (
                 <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex flex-col gap-4">
