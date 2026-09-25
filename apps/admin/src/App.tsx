@@ -11,6 +11,7 @@ import { Login } from './pages/admin/Login';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { WebsiteContentPage } from './pages/admin/WebsiteContentPage';
 import { NavigationPage } from './pages/admin/NavigationPage';
+import { SettingsPage } from './pages/admin/SettingsPage';
 import { Inbox } from './pages/Inbox';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
               <Route index element={<Navigate to="/website" replace />} />
               <Route path="website" element={<WebsiteContentPage />} />
               <Route path="website/navigation" element={<NavigationPage />} />
+              <Route path="settings" element={<SettingsPage />} />
               <Route path="inbox" element={<Inbox />} />
               <Route path="*" element={<Navigate to="/website" replace />} />
             </Route>
