@@ -53,12 +53,16 @@
 
 <table>
   <tr>
-    <td width="50%"><b>🏢 Services Page</b><br/><img src="screenshots/services.png" alt="Services page" /></td>
+    <td width="50%"><b>🏢 Services Page</b><br/><img src="screenshots/services_page.png" alt="Services page" /></td>
     <td width="50%"><b>🚜 Heavy Equipment</b><br/><img src="screenshots/equipment.png" alt="Equipment page" /></td>
   </tr>
   <tr>
+    <td width="50%"><b>🏗️ Project Portfolio</b><br/><img src="screenshots/projects.png" alt="Projects page" /></td>
     <td width="50%"><b>📞 Contact & Leads</b><br/><img src="screenshots/contact.png" alt="Contact form" /></td>
+  </tr>
+  <tr>
     <td width="50%"><b>🛡️ Admin Login</b><br/><img src="screenshots/admin-login.png" alt="Admin login page" /></td>
+    <td width="50%"><b>⚙️ Admin Settings</b><br/><img src="screenshots/admin-settings.png" alt="Admin settings" /></td>
   </tr>
 </table>
 
@@ -69,6 +73,13 @@
 <img src="screenshots/admin-dashboard.png" alt="Admin CMS dashboard" width="100%" />
 
 </div>
+
+<table>
+  <tr>
+    <td width="50%"><b>🧭 Navigation Studio</b><br/><img src="screenshots/admin-navigation.png" alt="Admin navigation menu editor" /></td>
+    <td width="50%"><b>📥 Client Inbox</b><br/><img src="screenshots/admin-inbox.png" alt="Admin client inbox" /></td>
+  </tr>
+</table>
 
 ---
 
