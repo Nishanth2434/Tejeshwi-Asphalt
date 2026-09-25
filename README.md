@@ -2,81 +2,206 @@
 
 # 🚧 Tejashwi Asphalt & Constructions 🚧
 
-**A premium, high-performance website and full-stack Content Management System for an industry-leading construction firm.**
+### A premium, high-performance website and full-stack Content Management System for an industry-leading construction firm.
 
-[![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Vite](https://img.shields.io/badge/Vite-8.2-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-
-[🌐 View Live Website](https://gsp-construction.vercel.app/) <!-- Update this link to your actual Vercel domain -->
 <br/>
+
+[![Live Website](https://img.shields.io/badge/🌐_Live_Website-Visit_Now-2563EB?style=for-the-badge&logoColor=white)](https://gsp-construction.vercel.app/)
+[![Stars](https://img.shields.io/github/stars/Nishanth2434/Tejeshwi-Asphalt?style=for-the-badge&color=F59E0B)](https://github.com/Nishanth2434/Tejeshwi-Asphalt/stargazers)
+[![License](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)](LICENSE)
+
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-v3-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Cloud-4169E1?style=flat-square&logo=postgresql&logoColor=white)](https://postgresql.org)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](#-contributing)
 
 </div>
 
 ---
 
-## 📸 Screenshots
+## 🌐 Live Demo
 
-*(Note: Replace these placeholder paths with actual screenshots of your application in the `/screenshots` folder!)*
-
-### 🏢 Client Website
 <div align="center">
-  <img src="screenshots/home.png" alt="Home Page Preview" width="800" style="border-radius: 12px; margin-bottom: 20px;" />
-  <img src="screenshots/services.png" alt="Services Preview" width="800" style="border-radius: 12px; margin-bottom: 20px;" />
+
+### Try the live website here 👇
+
+<a href="https://gsp-construction.vercel.app/">
+  <img src="https://img.shields.io/badge/🚀_LAUNCH_LIVE_APP-gsp--construction.vercel.app-2563EB?style=for-the-badge&logoColor=white" alt="Live Website" height="52" />
+</a>
+
+<br/><br/>
+
+| Area                   | URL                                                  |
+| :--------------------- | :--------------------------------------------------- |
+| 🚧 Client Website      | https://gsp-construction.vercel.app                  |
+| 🛡️ Admin CMS Login     | https://gsp-construction.vercel.app/admin/login      |
+
 </div>
 
-### 🛡️ Admin CMS Dashboard
+---
+
+## 📸 A Look Inside — Website Trailer
+
 <div align="center">
-  <img src="screenshots/admin_dashboard.png" alt="Admin Content Editor" width="800" style="border-radius: 12px; margin-bottom: 20px;" />
-  <img src="screenshots/admin_settings.png" alt="Admin Settings" width="800" style="border-radius: 12px;" />
+
+<b>🏠 Home — dynamic hero banner, services, and live company stats</b>
+
+<img src="screenshots/home.png" alt="Tejashwi Asphalt home page" width="100%" />
+
+</div>
+
+<table>
+  <tr>
+    <td width="50%"><b>🏢 Services Page</b><br/><img src="screenshots/services.png" alt="Services page" /></td>
+    <td width="50%"><b>🚜 Heavy Equipment</b><br/><img src="screenshots/equipment.png" alt="Equipment page" /></td>
+  </tr>
+  <tr>
+    <td width="50%"><b>📞 Contact & Leads</b><br/><img src="screenshots/contact.png" alt="Contact form" /></td>
+    <td width="50%"><b>🛡️ Admin Login</b><br/><img src="screenshots/admin-login.png" alt="Admin login page" /></td>
+  </tr>
+</table>
+
+<div align="center">
+
+<b>🛡️ Admin CMS — Edit content, navigation, and manage leads in real-time</b>
+
+<img src="screenshots/admin-dashboard.png" alt="Admin CMS dashboard" width="100%" />
+
 </div>
 
 ---
 
 ## ✨ Features
 
-### 🏢 Public Client Website
-- **Modern UI & Animations**: Silky smooth scroll animations using Framer Motion.
-- **Dynamic Content**: Every text block, image, and service card is pulled in real-time from the Supabase database.
-- **Responsive Design**: Beautiful layouts across desktop, tablet, and mobile.
-- **Service & Project Galleries**: Dedicated views for company services, heavy equipment, and completed projects.
-- **Interactive Contact Forms**: Integrated with Web3Forms for direct lead generation.
+<table>
+  <tr>
+    <td width="33%">
+      <h3>🔐 Authentication</h3>
+      Email / password secure sessions using Supabase Auth to protect the Admin CMS.
+    </td>
+    <td width="33%">
+      <h3>📝 Live Content Editor</h3>
+      Admins can update text, images, and services globally without touching a line of code.
+    </td>
+    <td width="33%">
+      <h3>🛡️ Admin Dashboard</h3>
+      A private portal dedicated to managing the entire public-facing website.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>🧭 Dynamic Navigation</h3>
+      Build, reorder, and hide navigation menu items directly from the CMS settings.
+    </td>
+    <td>
+      <h3>📥 Client Inbox</h3>
+      Collect leads via Web3Forms directly into the admin dashboard inbox.
+    </td>
+    <td>
+      <h3>📱 Responsive Design</h3>
+      Mobile-first layouts — beautiful fluid grids adapt seamlessly to phones and tablets.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>✨ Fluid Animations</h3>
+      Premium aesthetic powered by Framer Motion for scroll-triggered fades and pops.
+    </td>
+    <td>
+      <h3>🖼️ Advanced Galleries</h3>
+      Filterable project portfolios and heavy equipment showcases.
+    </td>
+    <td>
+      <h3>⏪ Factory Reset</h3>
+      A dedicated safety switch to instantly restore all database defaults if a mistake is made.
+    </td>
+  </tr>
+</table>
 
-### 🛡️ Secure Admin CMS Studio
-- **Authentication**: JWT-based secure login portal powered by Supabase Auth.
-- **Live Content Editor**: Edit the entire website's copy, headers, and descriptions without writing code.
-- **Navigation Builder**: Dynamically add, remove, and reorder website navigation links.
-- **Client Inbox**: View incoming project inquiries directly inside the admin portal.
-- **Account Security**: Secure password management with old-password verification.
-- **Factory Reset**: A safety switch to restore the entire website back to its seed state instantly.
+<details>
+<summary><b>🤖 Smart extras</b></summary>
+
+- **Real-time CMS Sync** — Edits made in the dashboard instantly reflect on the client site.
+- **Batched Save System** — Changes are held locally and saved globally via a batch-upsert to minimize database calls.
+- **Undo Capability** — A local snapshot allows admins to instantly undo unsaved CMS edits.
+- **Account Security** — Changing passwords requires verification of the previous password for maximum security.
+
+</details>
+
+---
+
+## 🧰 Tech Stack
+
+| Layer               | Technology                                                |
+| :------------------ | :-------------------------------------------------------- |
+| **Frontend**        | React 19 + Vite (Client and Admin portals)                |
+| **Database**        | PostgreSQL (Supabase) + Row Level Security                |
+| **Authentication**  | Supabase Auth — email/password, JWT sessions              |
+| **Hosting**         | Vercel (edge deployment + CDN)                            |
+| **Version Control** | Git + GitHub                                              |
+| **UI Framework**    | Tailwind CSS v3                                           |
+| **Icons**           | Lucide React                                              |
+| **Animations**      | Framer Motion                                             |
+| **Form Handling**   | Web3Forms (for contact submissions)                       |
 
 ---
 
 ## 🏗️ Architecture
 
-Built as a scalable NPM Workspace Monorepo containing two distinct applications:
+The app is built as an NPM Workspace Monorepo containing two separated apps (`client` and `admin`). The frontend is statically deployed via Vite, and pulls all layout and content data dynamically from the Supabase PostgreSQL database.
 
-| Technology                        | Why it was chosen                                                                            |
-| :-------------------------------- | :------------------------------------------------------------------------------------------- |
-| **React 19**                      | Mature component model, huge ecosystem, concurrent rendering for a snappy UI.                |
-| **Vite**                          | Lightning-fast frontend build tooling and instant Hot Module Replacement.                    |
-| **TypeScript**                    | End-to-end type safety preventing runtime errors.                                            |
-| **Supabase**                      | Backend-as-a-Service providing PostgreSQL, Auth, and instant APIs.                           |
-| **Tailwind CSS v3**               | Utility-first design system for rapid UI development without dead CSS.                       |
-| **Framer Motion**                 | Declarative animations for high-end, premium website aesthetics.                             |
-| **Lucide Icons**                  | Consistent, lightweight, tree-shakeable SVG icon set.                                        |
-| **React Router v7**               | Client-side routing with nested routes and layout preservation.                              |
-| **Vercel**                        | Edge network hosting with one-click automatic GitHub deployments.                            |
+```text
+Frontend (React + Vite SPA)
+        ↓
+Supabase JS Client
+        ↓
+Authentication (JWT session for Admin)
+        ↓
+Database (PostgreSQL content & navigation tables)
+```
+
+```mermaid
+flowchart TD
+    U[Visitor Browser] --> FE[React Client App]
+    A[Admin Browser] --> AD[React Admin App]
+    AD --> AUTH[Supabase Auth - JWT]
+    FE --> DB[(PostgreSQL Database)]
+    AUTH --> DB
+    FE --> FORMS[Web3Forms API]
+    FORMS --> INBOX[Admin Inbox]
+```
 
 ---
 
-## ⚡ Performance
+## 📁 Project Structure
 
-- 🚀 **Fast loading** - Optimized Vite bundling and aggressive code minification.
+```text
+Tejeshwi-Asphalt/
+├── package.json (Workspace Root)
+├── apps/
+│   ├── client/                 # Public Website App
+│   │   ├── src/
+│   │   │   ├── components/     # Reusable UI & Layouts
+│   │   │   ├── pages/          # Home, About, Services, Projects
+│   │   │   ├── lib/            # Supabase fetchers & store
+│   │   │   └── assets/         # Images, CSS
+│   ├── admin/                  # Secure CMS Dashboard App
+│   │   ├── src/
+│   │   │   ├── components/     # CMS UI, Layouts
+│   │   │   ├── pages/          # Content Editor, Navigation Editor, Settings
+│   │   │   ├── lib/            # AuthContext, ProtectedRoute, CMS Logic
+│   │   │   └── assets/         # CSS
+├── screenshots/                # README images
+```
+
+---
+
+## 🚀 Performance
+
+- ⚡ **Fast loading** - Optimized Vite bundling and aggressive code minification.
 - 📱 **Responsive** - Fluid grid layouts, no layout shift between breakpoints.
-- 🧩 **Component Modularity** - Reusable UI components (Buttons, Cards, Inputs).
+- 🧩 **Component Modularity** - Reusable UI components.
 - 🖼️ **Optimized Assets** - Compressed background images and web-safe SVGs.
 
 ---
@@ -102,32 +227,26 @@ Built as a scalable NPM Workspace Monorepo containing two distinct applications:
 
 ---
 
-## 🚀 Installation & Local Development
+## 🤝 Contributing
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Nishanth2434/Tejeshwi-Asphalt.git
-   cd Tejeshwi-Asphalt
-   ```
+Contributions make the open-source community amazing. Every PR is welcome!
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+<details open>
+<summary><b>Contribution steps</b></summary>
 
-3. **Set up Environment Variables:**
-   Create a `.env.local` file in the root directory:
-   ```env
-   VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
+1. **Fork** the repository
+2. **Create a branch** - `git checkout -b feature/amazing-feature`
+3. **Commit your changes** - `git commit -m "feat: add amazing feature"`
+4. **Push the branch** - `git push origin feature/amazing-feature`
+5. **Open a Pull Request** describing what changed and why
 
-4. **Start the Development Servers:**
-   ```bash
-   npm run dev
-   ```
-   *The Client runs on `http://localhost:5173`*
-   *The Admin runs on `http://localhost:5174`*
+</details>
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**.
 
 ---
 
